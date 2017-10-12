@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="[TOC] 1. 服务器配置a. 开放端口进腾讯云购买好云主机后，打开控制台：  配置安全组，放通全部端口：  b. 下载ssh私钥文件。 上图是创建了私钥的网页，创建之前会有下载按钮，点击下载把私钥文件保存到本地用户名目录下的.ssh目录，私钥名字自己定义。.ssh是隐藏目录，要显示所有隐藏目录，可在终端输入： 1defaults write com.apple.finder AppleShow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mac Osx下腾讯云centos7.2配置">
+<meta property="og:url" content="https://www.sanqis.com/blog/year/09/13/其他-Mac-Osx下腾讯云centos7-2配置/index.html">
+<meta property="og:site_name" content="今夕何夕">
+<meta property="og:description" content="[TOC] 1. 服务器配置a. 开放端口进腾讯云购买好云主机后，打开控制台：  配置安全组，放通全部端口：  b. 下载ssh私钥文件。 上图是创建了私钥的网页，创建之前会有下载按钮，点击下载把私钥文件保存到本地用户名目录下的.ssh目录，私钥名字自己定义。.ssh是隐藏目录，要显示所有隐藏目录，可在终端输入： 1defaults write com.apple.finder AppleShow">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://img.blog.csdn.net/20170227120451855?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzAwNTc5MQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170227120514862?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzAwNTc5MQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170227171935023?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzAwNTc5MQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170227170527644?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzAwNTc5MQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170227170717580?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzAwNTc5MQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170227170059186?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzAwNTc5MQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170227171019363?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzAwNTc5MQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170227171159185?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzAwNTc5MQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:updated_time" content="2017-10-12T05:50:14.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Mac Osx下腾讯云centos7.2配置">
+<meta name="twitter:description" content="[TOC] 1. 服务器配置a. 开放端口进腾讯云购买好云主机后，打开控制台：  配置安全组，放通全部端口：  b. 下载ssh私钥文件。 上图是创建了私钥的网页，创建之前会有下载按钮，点击下载把私钥文件保存到本地用户名目录下的.ssh目录，私钥名字自己定义。.ssh是隐藏目录，要显示所有隐藏目录，可在终端输入： 1defaults write com.apple.finder AppleShow">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20170227120451855?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzAwNTc5MQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://www.sanqis.com/blog/year/09/13/其他-Mac-Osx下腾讯云centos7-2配置/"/>
+
+
+
+
+
+  <title>Mac Osx下腾讯云centos7.2配置 | 今夕何夕</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">今夕何夕</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">博客</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-sitemap">
+          <a href="/sitemap.xml" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            站点地图
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://www.sanqis.com/blog/year/09/13/其他-Mac-Osx下腾讯云centos7-2配置/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jadyli">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="今夕何夕">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Mac Osx下腾讯云centos7.2配置</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-13T14:33:31+08:00">
+                2017-09-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>[TOC]</p>
+<h2 id="1-服务器配置"><a href="#1-服务器配置" class="headerlink" title="1. 服务器配置"></a>1. 服务器配置</h2><h3 id="a-开放端口"><a href="#a-开放端口" class="headerlink" title="a. 开放端口"></a>a. 开放端口</h3><p>进<a href="https://console.qcloud.com/cvm" target="_blank" rel="external">腾讯云</a>购买好云主机后，打开控制台：</p>
+<p><img src="http://img.blog.csdn.net/20170227120451855?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzAwNTc5MQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>配置安全组，放通全部端口：</p>
+<p><img src="http://img.blog.csdn.net/20170227120514862?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzAwNTc5MQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h3 id="b-下载ssh私钥文件。"><a href="#b-下载ssh私钥文件。" class="headerlink" title="b. 下载ssh私钥文件。"></a>b. 下载ssh私钥文件。</h3><p><img src="http://img.blog.csdn.net/20170227171935023?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzAwNTc5MQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>上图是创建了私钥的网页，创建之前会有下载按钮，点击下载把私钥文件保存到本地用户名目录下的<code>.ssh</code>目录，私钥名字自己定义。<code>.ssh</code>是隐藏目录，要显示所有隐藏目录，可在终端输入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">defaults write com.apple.finder AppleShowAllFiles TRUE &amp;&amp; killall Finder</div></pre></td></tr></table></figure>
+<p>保存好之后，需要修改这个文件的权限为600，在终端输入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">chmod 600 文件名</div></pre></td></tr></table></figure>
+<p>然后再拷贝一份这个文件到非隐藏目录，以便稍后的使用，目录随意，我自己的是放在<code>文稿</code>里了。</p>
+<hr>
+<h2 id="2-远程连接"><a href="#2-远程连接" class="headerlink" title="2.远程连接"></a>2.远程连接</h2><h3 id="a-远程命令行"><a href="#a-远程命令行" class="headerlink" title="a.远程命令行"></a>a.远程命令行</h3><p>下载<a href="http://download.csdn.net/detail/u013005791/9764299" target="_blank" rel="external">Iterm2</a>,打开设置，profiles,如图：<br><img src="http://img.blog.csdn.net/20170227170527644?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzAwNTc5MQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt=""><br>参考我的设置，把Command中的sanqi改为你自己的私钥文件名，把ip改为你的服务器公网ip，在Basics中设置一个Shortcut key,之后就可以使用快捷键一键打开这个命令连接服务器了，连接后的界面：</p>
+<p><img src="http://img.blog.csdn.net/20170227170717580?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzAwNTc5MQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h3 id="b-远程可视化界面"><a href="#b-远程可视化界面" class="headerlink" title="b.远程可视化界面"></a>b.远程可视化界面</h3><p>要想ubentu一样看到界面，需要安装VNC server和图形包。<br>第一步，安装GNOME桌面：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum groupinstall GNOME Desktop</div></pre></td></tr></table></figure>
+<p>第二步，安装VNC server:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install tigervnc-server -y</div></pre></td></tr></table></figure>
+<p>第三步，设置登录密码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vncpasswd</div></pre></td></tr></table></figure>
+<p>第四步，启动VNC server：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vncserver :1</div></pre></td></tr></table></figure>
+<p>当然你可以输入其他数字，之后的输入对应上就行。</p>
+<p>第五步，在你的本地电脑上安装<a href="http://download.csdn.net/detail/u013005791/9764302" target="_blank" rel="external">VNCVieweer</a>。输入服务器公网ip:1(我的是123.206.234.13:1)。界面如图：<br><img src="http://img.blog.csdn.net/20170227170059186?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzAwNTc5MQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt=""><br>如果连不上，可能需要关闭防火墙，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">systemctl stop firewalld</div></pre></td></tr></table></figure>
+<p>用完再开启防火墙，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">systemctl start firewalld</div></pre></td></tr></table></figure>
+<p>关闭VNC server的命令为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vncserver -kill :1</div></pre></td></tr></table></figure>
+<hr>
+<h2 id="3-java"><a href="#3-java" class="headerlink" title="3.java"></a>3.java</h2><p>在iTerm2上连接服务器，查看可用的jar包：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum -y list java*</div></pre></td></tr></table></figure>
+<p>安装列表中的jdk1.8</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum -y install java-1.8.0-openjdk*</div></pre></td></tr></table></figure>
+<p>可能会提示是否继续，输入y即可。<br>安装完，查看Java版本：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">java -version</div></pre></td></tr></table></figure>
+<hr>
+<h2 id="4-mysql"><a href="#4-mysql" class="headerlink" title="4.mysql"></a>4.mysql</h2><p>下载repo源：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">wget http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm</div></pre></td></tr></table></figure>
+<p>安装<code>mysql-community-release-el7-5.noarch.rpm</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo rpm -ivh mysql-community-release-el7-5.noarch.rpm</div></pre></td></tr></table></figure>
+<p>安装MySQL</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo yum install mysql-server</div></pre></td></tr></table></figure>
+<p>重启MySQL</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service mysqld restart</div></pre></td></tr></table></figure>
+<p>修改MySQL密码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql -u root</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">set PASSWORD for &apos;root&apos;@&apos;localhost&apos; = PASSWORD(&apos;123456&apos;);</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">exit</div></pre></td></tr></table></figure>
+<p>设置MySQL可以远程连接</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">mysql -u root -p</div><div class="line"></div><div class="line">mysql-&gt; grant all privileges on *.* to &apos;root&apos;@&apos;%&apos; identified by &apos;你的密码&apos;;</div><div class="line"></div><div class="line">mysql-&gt; flush privileges;</div></pre></td></tr></table></figure>
+<p>此时你已经可以远程连接数据库了，我是用的Navicat管理数据库，<a href="http://download.csdn.net/detail/u013005791/9765394" target="_blank" rel="external">navicat11.2.14破解版</a>。<br>打开Navicat，<br><img src="http://img.blog.csdn.net/20170227171019363?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzAwNTc5MQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>点击Connection,选MySQL，</p>
+<p><img src="http://img.blog.csdn.net/20170227171159185?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzAwNTc5MQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>输入你的服务器公网IP和数据库登录名和密码就可以连上了。如果连不上，按照文章最后的防火墙命令开放3306端口再试下。</p>
+<hr>
+<h2 id="5-tomcat"><a href="#5-tomcat" class="headerlink" title="5.tomcat"></a>5.tomcat</h2><p>查看安装包</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum search tomcat</div></pre></td></tr></table></figure>
+<p>安装tomcat</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install tomcat tomcat-webapps tomcat-admin-webapps</div></pre></td></tr></table></figure>
+<p>防火墙添加80端口</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">firewall-cmd --zone=public --add-port=80/tcp --permanent</div></pre></td></tr></table></figure>
+<p>80端口转发到8080，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">firewall-cmd --add-forward-port=port=80:proto=tcp:toport=8080</div></pre></td></tr></table></figure>
+<p>此时直接输IP就可以访问Tomcat了，8080端口可以不用输了。</p>
+<p>常用命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">systemctl start tomcat.service   //启动</div><div class="line">systemctl stop tomcat.service //停止</div><div class="line">systemctl restart tomcat.service //重启</div><div class="line">yum -y remove tomcat*  //卸载</div></pre></td></tr></table></figure>
+<h3 id="支持https"><a href="#支持https" class="headerlink" title="支持https"></a>支持https</h3><p>参考<a href="https://www.qcloud.com/document/product/400/4143" target="_blank" rel="external">https://www.qcloud.com/document/product/400/4143</a></p>
+<p>配置SSL连接器，将www.domain.com.jks文件存放到/etc/tomcat/目录下，然后配置同目录下的server.xml文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;Connector port=&quot;8443&quot; protocol=&quot;org.apache.coyote.http11.Http11Protocol&quot;</div><div class="line">                  maxThreads=&quot;150&quot; SSLEnabled=&quot;true&quot; scheme=&quot;https&quot; secure=&quot;true&quot;</div><div class="line">                  keystoreFile=&quot;/etc/tomcat/www.sanqis.cn.jks&quot; keystorePass=&quot;12345666&quot;</div><div class="line">                  clientAuth=&quot;false&quot; sslProtocol=&quot;TLS&quot; /&gt;</div></pre></td></tr></table></figure>
+<h3 id="http自动跳转https的安全配置"><a href="#http自动跳转https的安全配置" class="headerlink" title="http自动跳转https的安全配置"></a>http自动跳转https的安全配置</h3><p>到conf目录下的web.xml。在后面，，也就是倒数第二段里，加上这样一段</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">&lt;login-config&gt;</div><div class="line">    &lt;!-- Authorization setting for SSL --&gt;</div><div class="line">    &lt;auth-method&gt;CLIENT-CERT&lt;/auth-method&gt;</div><div class="line">    &lt;realm-name&gt;Client Cert Users-only Area&lt;/realm-name&gt;</div><div class="line">    &lt;/login-config&gt;</div><div class="line">    &lt;security-constraint&gt;</div><div class="line">    &lt;!-- Authorization setting for SSL --&gt;</div><div class="line">    &lt;web-resource-collection&gt;</div><div class="line">    &lt;web-resource-name&gt;SSL&lt;/web-resource-name&gt;</div><div class="line">    &lt;url-pattern&gt;/*&lt;/url-pattern&gt;</div><div class="line">    &lt;/web-resource-collection&gt;</div><div class="line">    &lt;user-data-constraint&gt;</div><div class="line">    &lt;transport-guarantee&gt;CONFIDENTIAL&lt;/transport-guarantee&gt;</div><div class="line">    &lt;/user-data-constraint&gt;</div><div class="line">    &lt;/security-constraint&gt;</div></pre></td></tr></table></figure>
+<p>最后记得访问的端口是8443，不是8080</p>
+<h2 id="nginx"><a href="#nginx" class="headerlink" title="nginx"></a>nginx</h2><h3 id="安装-Nginx"><a href="#安装-Nginx" class="headerlink" title="安装 Nginx"></a>安装 Nginx</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install nginx -y</div></pre></td></tr></table></figure>
+<p>安装完成后，使用 <code>nginx</code> 命令启动 Nginx：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">nginx</div></pre></td></tr></table></figure>
+<p>此时，访问 http://&lt;您的域名&gt; 可以看到 Nginx 的测试页面</p>
+<blockquote>
+<p>如果无法访问，请重试用 <code>nginx -s reload</code> 命令重启 Nginx</p>
+</blockquote>
+<h3 id="配置静态服务器访问路径"><a href="#配置静态服务器访问路径" class="headerlink" title="配置静态服务器访问路径"></a>配置静态服务器访问路径</h3><p>外网用户访问服务器的 Web 服务由 Nginx 提供，Nginx 需要配置静态资源的路径信息才能通过 url 正确访问到服务器上的静态资源。</p>
+<p>打开 Nginx 的默认配置文件 /etc/nginx/nginx.conf ，修改 Nginx 配置，将默认的 <code>root /usr/share/nginx/html;</code> 修改为: <code>root /data/www;</code>，如下：</p>
+<blockquote>
+<p>示例代码：/etc/nginx/nginx.conf</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line">user nginx;</div><div class="line">worker_processes auto;</div><div class="line">error_log /var/log/nginx/error.log;</div><div class="line">pid /run/nginx.pid;</div><div class="line"></div><div class="line">include /usr/share/nginx/modules/*.conf;</div><div class="line"></div><div class="line">events &#123;</div><div class="line">    worker_connections 1024;</div><div class="line">&#125;</div><div class="line"></div><div class="line">http &#123;</div><div class="line">    log_format  main  &apos;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &apos;</div><div class="line">                      &apos;$status $body_bytes_sent &quot;$http_referer&quot; &apos;</div><div class="line">                      &apos;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&apos;;</div><div class="line"></div><div class="line">    access_log  /var/log/nginx/access.log  main;</div><div class="line"></div><div class="line">    sendfile            on;</div><div class="line">    tcp_nopush          on;</div><div class="line">    tcp_nodelay         on;</div><div class="line">    keepalive_timeout   65;</div><div class="line">    types_hash_max_size 2048;</div><div class="line"></div><div class="line">    include             /etc/nginx/mime.types;</div><div class="line">    default_type        application/octet-stream;</div><div class="line"></div><div class="line">    include /etc/nginx/conf.d/*.conf;</div><div class="line"></div><div class="line">    server &#123;</div><div class="line">        listen       80 default_server;</div><div class="line">        listen       [::]:80 default_server;</div><div class="line">        server_name  _;</div><div class="line">        root         /data/www;</div><div class="line"></div><div class="line">        include /etc/nginx/default.d/*.conf;</div><div class="line"></div><div class="line">        location / &#123;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        error_page 404 /404.html;</div><div class="line">            location = /40x.html &#123;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        error_page 500 502 503 504 /50x.html;</div><div class="line">            location = /50x.html &#123;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>配置文件将 /data/www/static 作为所有静态资源请求的根路径，如访问: http://&lt;您的域名&gt;/static/index.js，将会去 /data/www/static/ 目录下去查找 index.js。现在我们需要重启 Nginx 让新的配置生效，如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">nginx -s reload</div></pre></td></tr></table></figure>
+<p>重启后，现在我们应该已经可以使用我们的静态服务器了，现在让我们新建一个静态文件，查看服务是否运行正常。</p>
+<p>首先让我们在 /data 目录 下创建 www 目录，如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mkdir -p /data/www</div></pre></td></tr></table></figure>
+<p>创建第一个静态文件</p>
+<p>在 /data/www 目录下创建我们的第一个静态文件 index.html</p>
+<blockquote>
+<p>示例代码：/data/www/index.html</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html lang=&quot;zh&quot;&gt;</div><div class="line">&lt;head&gt;</div><div class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</div><div class="line">    &lt;title&gt;第一个静态文件&lt;/title&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">Hello world！</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
+<p>现在访问 http://&lt;您的域名&gt;/index.html 应该可以看到页面输出 [Hello world!]</p>
+<p>到此，一个基于 Nginx 的静态服务器就搭建完成了，现在所有放在 /data/www 目录下的的静态资源都可以直接通过域名访问。</p>
+<h3 id="支持https-1"><a href="#支持https-1" class="headerlink" title="支持https"></a>支持https</h3><p>申请：<a href="https://www.qcloud.com/document/product/400/6814" target="_blank" rel="external">https://www.qcloud.com/document/product/400/6814</a><br>参考：<a href="https://www.qcloud.com/document/product/400/4143" target="_blank" rel="external">https://www.qcloud.com/document/product/400/4143</a></p>
+<p>将域名 www.domain.com 的证书文件1_www.domain.com_bundle.crt 、私钥文件2_www.domain.com.key保存到同一个目录，例如/usr/local/nginx/conf目录下。<br>更新Nginx根目录下 conf/nginx.conf 文件如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line">server &#123;</div><div class="line">        listen       80 default_server;</div><div class="line">        listen       [::]:80 default_server;</div><div class="line">        server_name  www.sanqis.cn;</div><div class="line"></div><div class="line">        # Load configuration files for the default server block.</div><div class="line">        include /etc/nginx/default.d/*.conf;</div><div class="line">        rewrite ^(.*)$ https://$host$1 permanent;</div><div class="line"></div><div class="line">        location / &#123;</div><div class="line">        root         /data/www;</div><div class="line">        index index.html;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        error_page 404 /404.html;</div><div class="line">            location = /40x.html &#123;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        error_page 500 502 503 504 /50x.html;</div><div class="line">            location = /50x.html &#123;</div><div class="line">        &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">        listen 443;</div><div class="line">        server_name www.domain.com; #填写绑定证书的域名</div><div class="line">        ssl on;</div><div class="line">        ssl_certificate 1_www.domain.com_bundle.crt;</div><div class="line">        ssl_certificate_key 2_www.domain.com.key;</div><div class="line">        ssl_session_timeout 5m;</div><div class="line">        ssl_protocols TLSv1 TLSv1.1 TLSv1.2; #按照这个协议配置</div><div class="line">        ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:HIGH:!aNULL:!MD5:!RC4:!DHE;#按照这个套件配置</div><div class="line">        ssl_prefer_server_ciphers on;</div><div class="line">        location / &#123;</div><div class="line">            root   html; #站点目录</div><div class="line">            index  index.html index.htm;</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>重启生效。</p>
+<h3 id="转发给Tomcat页面去掉端口号"><a href="#转发给Tomcat页面去掉端口号" class="headerlink" title="转发给Tomcat页面去掉端口号"></a>转发给Tomcat页面去掉端口号</h3><p>继续修改nginx.conf:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">server &#123;</div><div class="line">        listen       80 default_server;</div><div class="line">        listen       [::]:80 default_server;</div><div class="line">        server_name  www.sanqis.cn;</div><div class="line"></div><div class="line">        # Load configuration files for the default server block.</div><div class="line">        include /etc/nginx/default.d/*.conf;</div><div class="line">        rewrite ^(.*)$ https://$host$1 permanent;</div><div class="line"></div><div class="line">        location / &#123;</div><div class="line">        root         /data/www;</div><div class="line">        index index.html;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        location ^~ /server/ &#123;</div><div class="line">            proxy_pass   https://10.154.13.189:8443/;</div><div class="line">            proxy_redirect off;</div><div class="line">            proxy_set_header X-Real-IP $remote_addr;</div><div class="line">            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        error_page 404 /404.html;</div><div class="line">            location = /40x.html &#123;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        error_page 500 502 503 504 /50x.html;</div><div class="line">            location = /50x.html &#123;</div><div class="line">        &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="常用配置"><a href="#常用配置" class="headerlink" title="常用配置"></a>常用配置</h2><h3 id="a-防火墙"><a href="#a-防火墙" class="headerlink" title="a.防火墙"></a>a.防火墙</h3><p><strong>开启防火墙</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">systemctl start firewalld</div></pre></td></tr></table></figure>
+<p><strong>停止</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">systemctl disable firewalld</div></pre></td></tr></table></figure>
+<p><strong>禁用</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">systemctl stop firewalld</div></pre></td></tr></table></figure>
+<p><strong>重启</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">systemctl restart firewalld.service</div></pre></td></tr></table></figure>
+<p><strong>显示状态</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">firewall-cmd –state</div></pre></td></tr></table></figure>
+<p><strong>更新防火墙规则</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">firewall-cmd –reload</div></pre></td></tr></table></figure>
+<p><strong>添加端口(比如:80)</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">firewall-cmd --zone=public --add-port=80/tcp --permanent</div></pre></td></tr></table></figure>
+<p><code>permanent</code>表示永久生效。</p>
+<p><strong>移除端口</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">firewall-cmd --remove-port=80/tcp</div></pre></td></tr></table></figure>
+<p><strong>查看开放的端口</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">firewall-cmd --list-ports</div></pre></td></tr></table></figure>
+<p><strong>查询端口是否开启（比如：80）</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">firewall-cmd --query-port=80/tcp</div></pre></td></tr></table></figure>
+<p><strong>查看所有端口状态</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">netstat -tunlp</div></pre></td></tr></table></figure>
+<p><strong>端口转发(比如：80–&gt;8080)</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">firewall-cmd --add-forward-port=port=80:proto=tcp:toport=8080</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/year/09/11/java-javaee-基础-Springboot的POST、GET、PUT、DELETE请求实例/" rel="next" title="Springboot的POST、GET、PUT、DELETE请求实例">
+                <i class="fa fa-chevron-left"></i> Springboot的POST、GET、PUT、DELETE请求实例
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/year/09/22/java-javaee-小程序java后台-账户/" rel="prev" title="小程序java后台-账户">
+                小程序java后台-账户 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Jadyli</p>
+              <p class="site-description motion-element" itemprop="description">三七的博客</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">40</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/Jadyli" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-服务器配置"><span class="nav-number">1.</span> <span class="nav-text">1. 服务器配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#a-开放端口"><span class="nav-number">1.1.</span> <span class="nav-text">a. 开放端口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#b-下载ssh私钥文件。"><span class="nav-number">1.2.</span> <span class="nav-text">b. 下载ssh私钥文件。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-远程连接"><span class="nav-number">2.</span> <span class="nav-text">2.远程连接</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#a-远程命令行"><span class="nav-number">2.1.</span> <span class="nav-text">a.远程命令行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#b-远程可视化界面"><span class="nav-number">2.2.</span> <span class="nav-text">b.远程可视化界面</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-java"><span class="nav-number">3.</span> <span class="nav-text">3.java</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-mysql"><span class="nav-number">4.</span> <span class="nav-text">4.mysql</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-tomcat"><span class="nav-number">5.</span> <span class="nav-text">5.tomcat</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#支持https"><span class="nav-number">5.1.</span> <span class="nav-text">支持https</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#http自动跳转https的安全配置"><span class="nav-number">5.2.</span> <span class="nav-text">http自动跳转https的安全配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nginx"><span class="nav-number">6.</span> <span class="nav-text">nginx</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装-Nginx"><span class="nav-number">6.1.</span> <span class="nav-text">安装 Nginx</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置静态服务器访问路径"><span class="nav-number">6.2.</span> <span class="nav-text">配置静态服务器访问路径</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#支持https-1"><span class="nav-number">6.3.</span> <span class="nav-text">支持https</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#转发给Tomcat页面去掉端口号"><span class="nav-number">6.4.</span> <span class="nav-text">转发给Tomcat页面去掉端口号</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常用配置"><span class="nav-number">7.</span> <span class="nav-text">常用配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#a-防火墙"><span class="nav-number">7.1.</span> <span class="nav-text">a.防火墙</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jadyli</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
