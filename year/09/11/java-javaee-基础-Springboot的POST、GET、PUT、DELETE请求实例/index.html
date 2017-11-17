@@ -88,15 +88,15 @@
 
 <meta name="description" content="[TOC] 概述上文我们讲了Spring Boot + gradle环境搭建，能够将项目运行起来了。我们继续往前走，接收一些常见的请求。 1  Spring的请求前文我们的访问我们的项目直接就是用的http://localhost:8080/,这里对于具体的项目我们可以加上项目路径并且设置端口号。在application.properties文件中， 12server.port=9090serve">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Springboot的POST、GET、PUT、DELETE请求实例">
+<meta property="og:title" content="今夕何夕">
 <meta property="og:url" content="https://www.sanqis.com/blog/year/09/11/java-javaee-基础-Springboot的POST、GET、PUT、DELETE请求实例/index.html">
 <meta property="og:site_name" content="今夕何夕">
 <meta property="og:description" content="[TOC] 概述上文我们讲了Spring Boot + gradle环境搭建，能够将项目运行起来了。我们继续往前走，接收一些常见的请求。 1  Spring的请求前文我们的访问我们的项目直接就是用的http://localhost:8080/,这里对于具体的项目我们可以加上项目路径并且设置端口号。在application.properties文件中， 12server.port=9090serve">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://img.blog.csdn.net/20170616180303144?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzAwNTc5MQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
-<meta property="og:updated_time" content="2017-10-12T05:52:06.000Z">
+<meta property="og:updated_time" content="2017-11-14T08:29:37.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Springboot的POST、GET、PUT、DELETE请求实例">
+<meta name="twitter:title" content="今夕何夕">
 <meta name="twitter:description" content="[TOC] 概述上文我们讲了Spring Boot + gradle环境搭建，能够将项目运行起来了。我们继续往前走，接收一些常见的请求。 1  Spring的请求前文我们的访问我们的项目直接就是用的http://localhost:8080/,这里对于具体的项目我们可以加上项目路径并且设置端口号。在application.properties文件中， 12server.port=9090serve">
 <meta name="twitter:image" content="http://img.blog.csdn.net/20170616180303144?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzAwNTc5MQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
 
@@ -134,7 +134,7 @@
 
 
 
-  <title>Springboot的POST、GET、PUT、DELETE请求实例 | 今夕何夕</title>
+  <title> | 今夕何夕</title>
   
 
 
@@ -318,7 +318,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Springboot的POST、GET、PUT、DELETE请求实例</h1>
+          <h1 class="post-title" itemprop="name headline"></h1>
         
 
         <div class="post-meta">
@@ -394,7 +394,7 @@
 <li>@PutMapping = @RequestMapping(method = RequestMethod.PUT)</li>
 <li>@DeleteMapping = @RequestMapping(method = RequestMethod.DELETE)</li>
 </ul>
-<p>组合注解是方法级别的，只能用在方法上，我们的实例基本都用变形。</p>
+<p>组合注解是方法级别的，只能用在方法上，我们的实例基本都用组合注解。</p>
 <h4 id="1-1-2-RequestParam"><a href="#1-1-2-RequestParam" class="headerlink" title="1.1.2 @RequestParam"></a>1.1.2 @RequestParam</h4><p>用法如下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@PostMapping</span>(value = <span class="string">"login"</span>)</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">login</span><span class="params">(@RequestParam String name, @RequestParam String password)</span> </span>&#123;</div><div class="line">    System.out.println(name + <span class="string">":"</span> + password);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>@RequestParam注解可以用来提取名为“name”的String类型的参数，并将之作为输入参数传入，这就是SpringMVC的提取和解析请求参数的能力。<br>我们甚至可以不用这个注解，也能只要传入参数名和方法的参数名一致，也能匹配：</p>
@@ -464,8 +464,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/year/09/11/java-javaee-基础-Mybatis-Plugin-for-IntelliJ-IDEA文档/" rel="next" title="Mybatis Plugin for IntelliJ IDEA文档">
-                <i class="fa fa-chevron-left"></i> Mybatis Plugin for IntelliJ IDEA文档
+              <a href="/year/09/11/java-javaee-基础-设计模式/" rel="next" title="设计模式">
+                <i class="fa fa-chevron-left"></i> 设计模式
               </a>
             
           </div>
@@ -474,8 +474,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/year/09/11/java-javaee-基础-设计模式/" rel="prev" title="设计模式">
-                设计模式 <i class="fa fa-chevron-right"></i>
+              <a href="/year/09/11/java-javaee-基础-Mybatis-Plugin-for-IntelliJ-IDEA文档/" rel="prev" title="Mybatis Plugin for IntelliJ IDEA文档">
+                Mybatis Plugin for IntelliJ IDEA文档 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
