@@ -93,10 +93,13 @@
 <meta property="og:site_name" content="今夕何夕">
 <meta property="og:description" content="Android Runtime (ART) 是运行 Android 5.0（API 级别 21）及更高版本的设备的默认运行时。 此运行时提供了多种可改善 Android 平台和应用的性能和流畅度的功能。 您可以在 ART 简介中找到关于 ART 新功能的更多信息。 不过，部分适合 Dalvik 的技术并不适用于 ART。本文档可帮助您了解在迁移现有应用，使其与 ART 兼容时需要注意的事项。 大多">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-11-21T07:34:45.000Z">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/icP4061mjicTH5yUdY1CWF5yy30cY0AU9OH7RoA0pnIEsEiamwibjkHVzYcrz7Jd7erLgicoICAicvOseibpX32ia4zPzw/0?wx_fmt=png">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_jpg/icP4061mjicTH5yUdY1CWF5yy30cY0AU9OPPLarRpibOUl3SuFUmpayEgnnWndkV0MLK97NCGaB8uXk62PcoDjQRA/0?wx_fmt=jpeg">
+<meta property="og:updated_time" content="2017-11-21T10:20:40.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="蜗牛计划day04：在Android Runtime(ART)上验证应用行为">
 <meta name="twitter:description" content="Android Runtime (ART) 是运行 Android 5.0（API 级别 21）及更高版本的设备的默认运行时。 此运行时提供了多种可改善 Android 平台和应用的性能和流畅度的功能。 您可以在 ART 简介中找到关于 ART 新功能的更多信息。 不过，部分适合 Dalvik 的技术并不适用于 ART。本文档可帮助您了解在迁移现有应用，使其与 ART 兼容时需要注意的事项。 大多">
+<meta name="twitter:image" content="https://mmbiz.qpic.cn/mmbiz_png/icP4061mjicTH5yUdY1CWF5yy30cY0AU9OH7RoA0pnIEsEiamwibjkHVzYcrz7Jd7erLgicoICAicvOseibpX32ia4zPzw/0?wx_fmt=png">
 
 
 
@@ -357,6 +360,10 @@
 <li>一些应用对 <code>/system/framework</code>、<code>/data/dalvik-cache</code> 中或 <a href="https://developer.android.google.cn/reference/dalvik/system/DexClassLoader.html" target="_blank" rel="external">DexClassLoader</a> 的优化输出目录中的安装的 <code>.odex</code> 文件格式具有依赖性。 这些文件现在是 ELF 文件，而不是 DEX 文件的扩展形式。 尽管 ART 努力遵循与 Dalvik 相同的命名和锁定规则，但应用不能依赖于文件格式，因为该格式可能未经通知便发生更改。</li>
 </ul>
 <h2 id="报告问题"><a href="#报告问题" class="headerlink" title="报告问题"></a>报告问题</h2><p>如果您遇到任何不是由于应用 JNI 问题而导致的问题，请通过位于 <a href="https://code.google.com/p/android/issues/list" target="_blank" rel="external">https://code.google.com/p/android/issues/list</a> 的 Android 开源项目问题跟踪器报告这些问题。请包含 <code>&quot;adb bugreport&quot;</code> 和 Google Play 商店中的应用链接（如果可用）。 否则，如果可能，请附加用于重现该问题的 APK。 请注意，这些问题（包括附件）是公开可见的。</p>
+<p>官网链接：<a href="https://developer.android.google.cn/guide/practices/verifying-apps-art.html" target="_blank" rel="external">https://developer.android.google.cn/guide/practices/verifying-apps-art.html</a></p>
+<p>扫描二维码加入三七文档库交流群，或者添加三七拉你入群。</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/icP4061mjicTH5yUdY1CWF5yy30cY0AU9OH7RoA0pnIEsEiamwibjkHVzYcrz7Jd7erLgicoICAicvOseibpX32ia4zPzw/0?wx_fmt=png" alt=""></p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/icP4061mjicTH5yUdY1CWF5yy30cY0AU9OPPLarRpibOUl3SuFUmpayEgnnWndkV0MLK97NCGaB8uXk62PcoDjQRA/0?wx_fmt=jpeg" alt=""></p>
 
       
     </div>
@@ -419,6 +426,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/guide/components/intents-filters/" rel="prev" title="蜗牛计划day05：Intent 和 Intent 过滤器">
+                蜗牛计划day05：Intent 和 Intent 过滤器 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -495,7 +506,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">50</span>
+                  <span class="site-state-item-count">51</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
