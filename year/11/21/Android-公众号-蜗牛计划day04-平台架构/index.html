@@ -86,17 +86,19 @@
 
 
 
-<meta name="description" content="数据计算方法 数值格式化方法   所有float和double类型的加减乘除都不能直接算,包括乘以10除以10等操作，举个错误的栗子：  加  123&amp;gt; &amp;gt; &amp;gt; double a = 99.9,b = -9.99;&amp;gt; &amp;gt; &amp;gt; System.out.println(&amp;quot;a+b=&amp;quot;+(a+b));&amp;gt; &amp;gt; &amp;gt; 输出89.9100">
+<meta name="description" content="Android 是一种基于 Linux 的开放源代码软件栈，为广泛的设备和机型而创建。下图所示为 Android 平台的主要组件。  图 1. Android 软件栈。 Linux 内核Android 平台的基础是 Linux 内核。例如，Android Runtime (ART) 依靠 Linux 内核来执行底层功能，例如线程和底层内存管理。 使用 Linux 内核可让 Android 利用主要">
 <meta property="og:type" content="article">
-<meta property="og:title" content="数据计算规范">
-<meta property="og:url" content="https://www.sanqis.com/blog/year/12/16/Android-基础-数据计算规范/index.html">
+<meta property="og:title" content="蜗牛计划day04：平台架构">
+<meta property="og:url" content="https://www.sanqis.com/blog/year/11/21/Android-公众号-蜗牛计划day04-平台架构/index.html">
 <meta property="og:site_name" content="今夕何夕">
-<meta property="og:description" content="数据计算方法 数值格式化方法   所有float和double类型的加减乘除都不能直接算,包括乘以10除以10等操作，举个错误的栗子：  加  123&amp;gt; &amp;gt; &amp;gt; double a = 99.9,b = -9.99;&amp;gt; &amp;gt; &amp;gt; System.out.println(&amp;quot;a+b=&amp;quot;+(a+b));&amp;gt; &amp;gt; &amp;gt; 输出89.9100">
+<meta property="og:description" content="Android 是一种基于 Linux 的开放源代码软件栈，为广泛的设备和机型而创建。下图所示为 Android 平台的主要组件。  图 1. Android 软件栈。 Linux 内核Android 平台的基础是 Linux 内核。例如，Android Runtime (ART) 依靠 Linux 内核来执行底层功能，例如线程和底层内存管理。 使用 Linux 内核可让 Android 利用主要">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-10-12T05:56:16.000Z">
+<meta property="og:image" content="https://developer.android.google.cn/guide/platform/images/android-stack_2x.png">
+<meta property="og:updated_time" content="2017-11-21T05:22:10.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="数据计算规范">
-<meta name="twitter:description" content="数据计算方法 数值格式化方法   所有float和double类型的加减乘除都不能直接算,包括乘以10除以10等操作，举个错误的栗子：  加  123&amp;gt; &amp;gt; &amp;gt; double a = 99.9,b = -9.99;&amp;gt; &amp;gt; &amp;gt; System.out.println(&amp;quot;a+b=&amp;quot;+(a+b));&amp;gt; &amp;gt; &amp;gt; 输出89.9100">
+<meta name="twitter:title" content="蜗牛计划day04：平台架构">
+<meta name="twitter:description" content="Android 是一种基于 Linux 的开放源代码软件栈，为广泛的设备和机型而创建。下图所示为 Android 平台的主要组件。  图 1. Android 软件栈。 Linux 内核Android 平台的基础是 Linux 内核。例如，Android Runtime (ART) 依靠 Linux 内核来执行底层功能，例如线程和底层内存管理。 使用 Linux 内核可让 Android 利用主要">
+<meta name="twitter:image" content="https://developer.android.google.cn/guide/platform/images/android-stack_2x.png">
 
 
 
@@ -126,13 +128,13 @@
 
 
 
-  <link rel="canonical" href="https://www.sanqis.com/blog/year/12/16/Android-基础-数据计算规范/"/>
+  <link rel="canonical" href="https://www.sanqis.com/blog/year/11/21/Android-公众号-蜗牛计划day04-平台架构/"/>
 
 
 
 
 
-  <title>数据计算规范 | 今夕何夕</title>
+  <title>蜗牛计划day04：平台架构 | 今夕何夕</title>
   
 
 
@@ -299,7 +301,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://www.sanqis.com/blog/year/12/16/Android-基础-数据计算规范/">
+    <link itemprop="mainEntityOfPage" href="https://www.sanqis.com/blog/year/11/21/Android-公众号-蜗牛计划day04-平台架构/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jadyli">
@@ -316,7 +318,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">数据计算规范</h1>
+          <h1 class="post-title" itemprop="name headline">蜗牛计划day04：平台架构</h1>
         
 
         <div class="post-meta">
@@ -328,8 +330,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-16T11:18:31+08:00">
-                2016-12-16
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-21T10:00:59+08:00">
+                2017-11-21
               </time>
             
 
@@ -366,128 +368,38 @@
       
 
       
-        <blockquote>
+        <p>Android 是一种基于 Linux 的开放源代码软件栈，为广泛的设备和机型而创建。下图所示为 Android 平台的主要组件。</p>
+<p><img src="https://developer.android.google.cn/guide/platform/images/android-stack_2x.png" alt=""></p>
+<p><strong>图 1.</strong> Android 软件栈。</p>
+<h2 id="Linux-内核"><a href="#Linux-内核" class="headerlink" title="Linux 内核"></a>Linux 内核</h2><p>Android 平台的基础是 Linux 内核。例如，<a href="#art">Android Runtime (ART)</a> 依靠 Linux 内核来执行底层功能，例如线程和底层内存管理。</p>
+<p>使用 Linux 内核可让 Android 利用<a href="https://source.android.google.cn/security/overview/kernel-security.html" target="_blank" rel="external">主要安全功能</a>，并且允许设备制造商为著名的内核开发硬件驱动程序。</p>
+<h2 id="硬件抽象层-HAL"><a href="#硬件抽象层-HAL" class="headerlink" title="硬件抽象层 (HAL)"></a>硬件抽象层 (HAL)</h2><p><a href="https://source.android.google.cn/devices/index.html#Hardware%20Abstraction%20Layer" target="_blank" rel="external">硬件抽象层 (HAL)</a> 提供标准界面，向更高级别的 <a href="#api-framework">Java API 框架</a>显示设备硬件功能。HAL 包含多个库模块，其中每个模块都为特定类型的硬件组件实现一个界面，例如<a href="https://source.android.google.cn/devices/camera/index.html" target="_blank" rel="external">相机</a>或<a href="https://source.android.google.cn/devices/bluetooth.html" target="_blank" rel="external">蓝牙</a>模块。当框架 API 要求访问设备硬件时，Android 系统将为该硬件组件加载库模块。</p>
+<h2 id="art">Android Runtime</h2>
+
+<p>对于运行 Android 5.0（API 级别 21）或更高版本的设备，每个应用都在其自己的进程中运行，并且有其自己的 <a href="http://source.android.google.cn/devices/tech/dalvik/index.html" target="_blank" rel="external">Android Runtime (ART)</a> 实例。ART 编写为通过执行 DEX 文件在低内存设备上运行多个虚拟机，DEX 文件是一种专为 Android 设计的字节码格式，经过优化，使用的内存很少。编译工具链（例如 <a href="https://source.android.google.cn/source/jack.html" target="_blank" rel="external">Jack</a>）将 Java 源代码编译为 DEX 字节码，使其可在 Android 平台上运行。</p>
+<p>ART 的部分主要功能包括：</p>
 <ul>
-<li>数据计算方法</li>
-<li>数值格式化方法</li>
+<li>预先 (AOT) 和即时 (JIT) 编译</li>
+<li>优化的垃圾回收 (GC)</li>
+<li>更好的调试支持，包括专用采样分析器、详细的诊断异常和崩溃报告，并且能够设置监视点以监控特定字段</li>
 </ul>
-<blockquote>
-<p><strong>所有float和double类型的加减乘除都不能直接算,包括乘以10除以10等操作，举个错误的栗子：</strong></p>
-<p> <strong>加</strong></p>
-<blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt; &gt; &gt; double a = 99.9,b = -9.99;</div><div class="line">&gt; &gt; &gt; System.out.println(&quot;a+b=&quot;+(a+b));</div><div class="line">&gt; &gt; &gt;</div></pre></td></tr></table></figure>
-<p>输出<code>89.910000.....</code></p>
-</blockquote>
-<p><strong>减</strong></p>
-<blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt; &gt; &gt; double a = 99.9,b = 9.99;</div><div class="line">&gt; &gt; &gt; System.out.println(&quot;a-b=&quot;+(a-b));</div><div class="line">&gt; &gt; &gt;</div></pre></td></tr></table></figure>
-<p>输出<code>89.910000.....</code></p>
-</blockquote>
-<p><strong>乘除</strong></p>
-<blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&gt; &gt; &gt; double a = 11.1,b = 9;</div><div class="line">&gt; &gt; &gt; System.out.println(&quot;a*b=&quot;+(a*b));</div><div class="line">&gt; &gt; &gt; System.out.println(&quot;a/b=&quot;+(a/b));</div><div class="line">&gt; &gt; &gt;</div></pre></td></tr></table></figure>
-<p>输出 </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt; &gt; &gt;99.89999.....</div><div class="line">&gt; &gt; &gt;1.233333.....</div><div class="line">&gt; &gt; &gt;</div></pre></td></tr></table></figure>
-</blockquote>
-<p>所以，所有数值运算必须转换为成BigDecimal,这个类是专门处理精度运算的。<br>这里封装在<code>DataUtility</code>中，做数值运算时直接调用<code>add</code>、<code>subtract</code>、<code>multiply</code>、<code>divide</code>方法。<br>还有一个需要注意的就是调用这个方法后返回值的赋值问题，比如返回一个float,赋值给double,这个时候系统的自动强转是肯定出错的(除了整数)，所以一定要注意返回值，或者使用DataUtility的强转方法。</p>
-</blockquote>
-</blockquote>
-<p>具体方法如下图，运算的精度原则是四舍五入。</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">描述</th>
-<th style="text-align:center">方法名</th>
-<th style="text-align:center">参数</th>
-<th style="text-align:center">举例</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">加法（默认精确2位）</td>
-<td style="text-align:center">add</td>
-<td style="text-align:center">（double… numbers）等,参数会逐个向后累加</td>
-<td style="text-align:center">add(1，2，3),结果为6.00</td>
-</tr>
-<tr>
-<td style="text-align:center">加法(带精度)</td>
-<td style="text-align:center">add</td>
-<td style="text-align:center">(int scale, double… numbers)</td>
-<td style="text-align:center">add(1，2，3),结果为5.0</td>
-</tr>
-<tr>
-<td style="text-align:center">减法（默认精确2位）</td>
-<td style="text-align:center">subtract</td>
-<td style="text-align:center">（double… numbers）等,参数会逐个向后做减法</td>
-<td style="text-align:center">subtract(10，2，3),结果为5.00</td>
-</tr>
-<tr>
-<td style="text-align:center">减法(带精度)</td>
-<td style="text-align:center">add</td>
-<td style="text-align:center">(int scale, double… numbers)</td>
-<td style="text-align:center">subtract(1，10，2，3),结果为5.0</td>
-</tr>
-<tr>
-<td style="text-align:center">乘法</td>
-<td style="text-align:center">multiply</td>
-<td style="text-align:center">（double… numbers）等,参数会逐个向后做乘法</td>
-<td style="text-align:center">multiply(10，2，3),结果为60.00</td>
-</tr>
-<tr>
-<td style="text-align:center">乘法(带精度)</td>
-<td style="text-align:center">multiply</td>
-<td style="text-align:center">(int scale, double… numbers)</td>
-<td style="text-align:center">multiply(1，10，2，3),结果为60.0</td>
-</tr>
-<tr>
-<td style="text-align:center">除法</td>
-<td style="text-align:center">divide</td>
-<td style="text-align:center">（double… numbers）等,参数会逐个向后做除法</td>
-<td style="text-align:center">divide(10，2，3),结果为1.67</td>
-</tr>
-<tr>
-<td style="text-align:center">除法(带精度)</td>
-<td style="text-align:center">divide</td>
-<td style="text-align:center">(int scale, double… numbers)</td>
-<td style="text-align:center">divide(10，2，3),结果为1.7</td>
-</tr>
-<tr>
-<td style="text-align:center">取余</td>
-<td style="text-align:center">remainder</td>
-<td style="text-align:center">（double number）等,取余，两个参数</td>
-<td style="text-align:center">remainder(5，3),结果为2</td>
-</tr>
-<tr>
-<td style="text-align:center">强转为int</td>
-<td style="text-align:center">castToInt</td>
-<td style="text-align:center">（double number）</td>
-<td style="text-align:center">castToInt(5.7),结果为6;castToInt(5.4),结果为5</td>
-</tr>
-<tr>
-<td style="text-align:center">强转为long</td>
-<td style="text-align:center">castToLong</td>
-<td style="text-align:center">（double number）</td>
-<td style="text-align:center">castToLong(5.7),结果为6;castToInt(5.4),结果为5</td>
-</tr>
-<tr>
-<td style="text-align:center">强转为float</td>
-<td style="text-align:center">castToFloat</td>
-<td style="text-align:center">（double number)</td>
-<td style="text-align:center">castToFloat(5.7),结果为5.7</td>
-</tr>
-<tr>
-<td style="text-align:center">强转为double</td>
-<td style="text-align:center">castToDouble</td>
-<td style="text-align:center">（float number)</td>
-<td style="text-align:center">castToDouble(5.7),结果为5.7</td>
-</tr>
-</tbody>
-</table>
-<h2 id="数值格式化"><a href="#数值格式化" class="headerlink" title="数值格式化"></a>数值格式化</h2><p>数值格式化方法封装在AsdUtility中。</p>
-<h3 id="不保留0"><a href="#不保留0" class="headerlink" title="不保留0"></a>不保留0</h3><p>如果小数位最后一位是0则不保留,</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">String formatNumber(double number, int scale) //指定精度</div><div class="line">String formatNumber(double number) //默认精度是2</div><div class="line">String formatNumber(float number, int scale) //指定精度</div><div class="line">String formatNumber(float number)  //默认精度是2</div></pre></td></tr></table></figure>
-<h3 id="保留0"><a href="#保留0" class="headerlink" title="保留0"></a>保留0</h3><p>保留小数位的0。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">String formatNumberByLen(double number, int len)</div><div class="line">String formatNumberByLen(float number, int len)</div></pre></td></tr></table></figure>
+<p>在 Android 版本 5.0（API 级别 21）之前，Dalvik 是 Android Runtime。如果您的应用在 ART 上运行效果很好，那么它应该也可在 Dalvik 上运行，但<a href="https://developer.android.google.cn/guide/platform/verifying-apps-art.html" target="_blank" rel="external">反过来不一定</a>。</p>
+<p>Android 还包含一套核心运行时库，可提供 Java API 框架使用的 Java 编程语言大部分功能，包括一些 <a href="https://developer.android.google.cn/guide/platform/j8-jack.html" target="_blank" rel="external">Java 8 语言功能</a>。</p>
+<h2 id="原生-C-C-库"><a href="#原生-C-C-库" class="headerlink" title="原生 C/C++ 库"></a>原生 C/C++ 库</h2><p>许多核心 Android 系统组件和服务（例如 ART 和 HAL）构建自原生代码，需要以 C 和 C++ 编写的原生库。Android 平台提供 Java 框架 API 以向应用显示其中部分原生库的功能。例如，您可以通过 Android 框架的 <a href="https://developer.android.google.cn/reference/android/opengl/package-summary.html" target="_blank" rel="external">Java OpenGL API</a> 访问 <a href="https://developer.android.google.cn/guide/topics/graphics/opengl.html" target="_blank" rel="external">OpenGL ES</a>，以支持在应用中绘制和操作 2D 和 3D 图形。</p>
+<p>如果开发的是需要 C 或 C++ 代码的应用，可以使用 <a href="https://developer.android.google.cn/ndk/index.html" target="_blank" rel="external">Android NDK</a> 直接从原生代码访问某些<a href="https://developer.android.google.cn/ndk/guides/stable_apis.html" target="_blank" rel="external">原生平台库</a>。</p>
+<h2 id="api-framework">Java API 框架</h2>
+
+<p>您可通过以 Java 语言编写的 API 使用 Android OS 的整个功能集。这些 API 形成创建 Android 应用所需的构建块，它们可简化核心模块化系统组件和服务的重复使用，包括以下组件和服务：</p>
+<ul>
+<li>丰富、可扩展的<a href="https://developer.android.google.cn/guide/topics/ui/overview.html" target="_blank" rel="external">视图系统</a>，可用以构建应用的 UI，包括列表、网格、文本框、按钮甚至可嵌入的网络浏览器</li>
+<li><a href="https://developer.android.google.cn/guide/topics/resources/overview.html" target="_blank" rel="external">资源管理器</a>，用于访问非代码资源，例如本地化的字符串、图形和布局文件</li>
+<li><a href="https://developer.android.google.cn/guide/topics/ui/notifiers/notifications.html" target="_blank" rel="external">通知管理器</a>，可让所有应用在状态栏中显示自定义提醒</li>
+<li><a href="https://developer.android.google.cn/guide/components/activities.html" target="_blank" rel="external">Activity 管理器</a>，用于管理应用的生命周期，提供常见的<a href="https://developer.android.google.cn/guide/components/tasks-and-back-stack.html" target="_blank" rel="external">导航返回栈</a></li>
+<li><a href="https://developer.android.google.cn/guide/topics/providers/content-providers.html" target="_blank" rel="external">内容提供程序</a>，可让应用访问其他应用（例如“联系人”应用）中的数据或者共享其自己的数据</li>
+</ul>
+<p>开发者可以完全访问 Android 系统应用使用的<a href="https://developer.android.google.cn/reference/packages.html" target="_blank" rel="external">框架 API</a>。</p>
+<h2 id="系统应用"><a href="#系统应用" class="headerlink" title="系统应用"></a>系统应用</h2><p>Android 随附一套用于电子邮件、短信、日历、互联网浏览和联系人等的核心应用。平台随附的应用与用户可以选择安装的应用一样，没有特殊状态。因此第三方应用可成为用户的默认网络浏览器、短信 Messenger 甚至默认键盘（有一些例外，例如系统的“设置”应用）。</p>
+<p>系统应用可用作用户的应用，以及提供开发者可从其自己的应用访问的主要功能。例如，如果您的应用要发短信，您无需自己构建该功能，可以改为调用已安装的短信应用向您指定的接收者发送消息。</p>
 
       
     </div>
@@ -541,8 +453,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/year/12/08/java-javaee-基础-mybatis-mysql-mac-navicat-中文乱码问题/" rel="next" title="mybatis + mysql + mac navicat 中文乱码问题">
-                <i class="fa fa-chevron-left"></i> mybatis + mysql + mac navicat 中文乱码问题
+              <a href="/year/11/21/Android-公众号-欢迎参加蜗牛计划/" rel="next" title="欢迎参加蜗牛计划">
+                <i class="fa fa-chevron-left"></i> 欢迎参加蜗牛计划
               </a>
             
           </div>
@@ -551,8 +463,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/year/01/04/Android-问题-错误集/" rel="prev" title="错误集">
-                错误集 <i class="fa fa-chevron-right"></i>
+              <a href="/year/11/21/Android-公众号-蜗牛计划day04-使用-Java-8-语言功能/" rel="prev" title="蜗牛计划day04：使用Java8语言功能">
+                蜗牛计划day04：使用Java8语言功能 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -677,7 +589,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#数值格式化"><span class="nav-number">1.</span> <span class="nav-text">数值格式化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#不保留0"><span class="nav-number">1.1.</span> <span class="nav-text">不保留0</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#保留0"><span class="nav-number">1.2.</span> <span class="nav-text">保留0</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux-内核"><span class="nav-number">1.</span> <span class="nav-text">Linux 内核</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#硬件抽象层-HAL"><span class="nav-number">2.</span> <span class="nav-text">硬件抽象层 (HAL)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#art"><span class="nav-number">3.</span> <span class="nav-text">Android Runtime</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#原生-C-C-库"><span class="nav-number">4.</span> <span class="nav-text">原生 C/C++ 库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#api-framework"><span class="nav-number">5.</span> <span class="nav-text">Java API 框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#系统应用"><span class="nav-number">6.</span> <span class="nav-text">系统应用</span></a></li></ol></div>
             
 
           </div>
