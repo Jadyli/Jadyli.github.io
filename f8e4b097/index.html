@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="[TOC] 获取特殊日期节假日节假日、补休日数据可以放在本地，不过最后放在服务器动态获取，本地缓存节假日数据：holidayInfo休息日数据：defferedInfo 123456789101112131415161718192021222324252627282930313233343536373839404142public static final class HolidayConst &amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android日历开发：日历显示需要准备哪些数据">
+<meta property="og:url" content="https://www.sanqis.com/blog/f8e4b097/index.html">
+<meta property="og:site_name" content="今夕何夕">
+<meta property="og:description" content="[TOC] 获取特殊日期节假日节假日、补休日数据可以放在本地，不过最后放在服务器动态获取，本地缓存节假日数据：holidayInfo休息日数据：defferedInfo 123456789101112131415161718192021222324252627282930313233343536373839404142public static final class HolidayConst &amp;">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-11-21T06:24:46.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android日历开发：日历显示需要准备哪些数据">
+<meta name="twitter:description" content="[TOC] 获取特殊日期节假日节假日、补休日数据可以放在本地，不过最后放在服务器动态获取，本地缓存节假日数据：holidayInfo休息日数据：defferedInfo 123456789101112131415161718192021222324252627282930313233343536373839404142public static final class HolidayConst &amp;">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://www.sanqis.com/blog/f8e4b097/"/>
+
+
+
+
+
+  <title>Android日历开发：日历显示需要准备哪些数据 | 今夕何夕</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">今夕何夕</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">博客</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://www.sanqis.com/blog/f8e4b097/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jadyli">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="今夕何夕">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android日历开发：日历显示需要准备哪些数据</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-15T16:13:46+08:00">
+                2017-08-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>[TOC]</p>
+<h2 id="获取特殊日期"><a href="#获取特殊日期" class="headerlink" title="获取特殊日期"></a>获取特殊日期</h2><h3 id="节假日"><a href="#节假日" class="headerlink" title="节假日"></a>节假日</h3><h4 id="节假日、补休日数据"><a href="#节假日、补休日数据" class="headerlink" title="节假日、补休日数据"></a>节假日、补休日数据</h4><p>可以放在本地，不过最后放在服务器动态获取，本地缓存<br>节假日数据：holidayInfo<br>休息日数据：defferedInfo</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">HolidayConst</span> </span>&#123;</div><div class="line">    <span class="comment">/**</span></div><div class="line"><span class="comment">     * 2013年节假日和补休日json,可以放到服务器</span></div><div class="line"><span class="comment">     */</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String calendar_holiday_2013 = <span class="string">"&#123;\"holidayInfo\":&#123;\"year\":2013,\"day\":[[\"1\",\"2\",\"3\"],[\"9\",\"10\",\"11\",\"12\","</span> +</div><div class="line">            <span class="string">"\"13\",\"14\",\"15\"],[\"\"],[\"4\",\"5\",\"6\",\"29\",\"30\"],[\"1\"],[\"10\",\"11\",\"12\"],[\"\"],"</span> +</div><div class="line">            <span class="string">"[\"\"],[\"19\",\"20\",\"21\"],[\"1\",\"2\",\"3\",\"4\",\"5\",\"6\",\"7\"],[\"\"],[\"\"]]&#125;,"</span> +</div><div class="line">            <span class="string">"\"defferedInfo\":&#123;\"year\":2013,\"day\":[[\"5\",\"6\"],[\"16\",\"17\"],[\"\"],[\"7\",\"27\",\"28\"],[\"\"],"</span> +</div><div class="line">            <span class="string">"[\"8\",\"9\"],[\"\"],[\"\"],[\"22\",\"29\"],[\"12\"],[\"\"],[\"\"]]&#125;&#125;"</span>;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line"><span class="comment">     * 2014年节假日和补休日json,可以放到服务器</span></div><div class="line"><span class="comment">     */</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String calendar_holiday_2014 = <span class="string">"&#123;\"holidayInfo\":&#123;\"year\":2014,\"day\":[[\"1\",\"31\"],[\"1\",\"2\",\"3\",\"4\",\"5\",\"6\"],"</span> +</div><div class="line">            <span class="string">"[\"\"],[\"5\",\"6\",\"7\"],[\"1\",\"2\",\"3\",\"31\"],[\"1\",\"2\"],[\"\"],[\"\"],[\"6\",\"7\",\"8\"],"</span> +</div><div class="line">            <span class="string">"[\"1\",\"2\",\"3\",\"4\",\"5\",\"6\",\"7\"],[\"\"],[\"\"]]&#125;,"</span> +</div><div class="line">            <span class="string">"\"defferedInfo\":&#123;\"year\":2014,\"day\":[[\"26\"],[\"8\"],[\"\"],[\"\"],[\"4\"],[\"\"],[\"\"],[\"\"],[\"28\"],[\"11\"],[\"\"],[\"\"]]&#125;&#125;"</span>;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line"><span class="comment">     * 2015年节假日和补休日json,可以放到服务器</span></div><div class="line"><span class="comment">     */</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String calendar_holiday_2015 = <span class="string">"&#123;\"holidayInfo\":&#123;\"year\":2015,\"day\":[[\"1\",\"2\",\"3\"],[\"18\",\"19\",\"20\",\"21\",\"22\",\"23\",\"24\"],"</span> +</div><div class="line">            <span class="string">"[\"\"],[\"4\",\"5\",\"6\"],[\"1\",\"2\",\"3\",\"31\"],[\"20\",\"21\",\"22\"],[\"\"],[\"\"],"</span> +</div><div class="line">            <span class="string">"[\"3\",\"4\",\"5\",\"26\",\"27\"],[\"1\",\"2\",\"3\",\"4\",\"5\",\"6\",\"7\"],[\"\"],[\"\"]]&#125;,"</span> +</div><div class="line">            <span class="string">"\"defferedInfo\":&#123;\"year\":2015,\"day\":[[\"4\"],[\"15\",\"16\",\"17\",\"28\"],[\"\"],[\"\"],[\"\"],[\"\"],"</span> +</div><div class="line">            <span class="string">"[\"\"],[\"\"],[\"6\"],[\"8\",\"9\",\"10\"],[\"\"],[\"\"]]&#125;&#125;"</span>;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line"><span class="comment">     * 2016年节假日和补休日json,可以放到服务器</span></div><div class="line"><span class="comment">     */</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String calendar_holiday_2016 = <span class="string">"&#123;\"holidayInfo\":&#123;\"year\":2016,\"day\":[[\"1\",\"2\",\"3\"],[\"7\",\"8\",\"9\",\"10\",\"11\",\"12\",\"13\"],[\"\"],"</span> +</div><div class="line">            <span class="string">"[\"2\",\"3\",\"4\",\"30\"],[\"1\",\"2\"],[\"9\",\"10\",\"11\"],[\"\"],[\"\"],[\"15\",\"16\",\"17\"],[\"1\",\"2\",\"3\",\"4\",\"5\",\"6\",\"7\"],[\"\"],"</span> +</div><div class="line">            <span class="string">"[\"\"]]&#125;,\"defferedInfo\":&#123;\"year\":2016,\"day\":[[\"\"],[\"6\",\"14\"],[\"\"],[\"\"],[\"\"],[\"12\"],[\"\"],[\"\"],[\"18\"],[\"8\",\"9\"],[\"\"],[\"\"]]&#125;&#125;"</span>;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line"><span class="comment">     * 2017年节假日和补休日json,可以放到服务器</span></div><div class="line"><span class="comment">     */</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String calendar_holiday_2017 = <span class="string">"&#123;\"holidayInfo\":&#123;\"year\":2017,\"day\":[[\"1\",\"2\",\"27\",\"28\",\"29\",\"30\",\"31\"],[\"1\",\"2\"],"</span> +</div><div class="line">            <span class="string">"[\"\"],[\"2\",\"3\",\"4\",\"29\",\"30\"],[\"1\",\"28\",\"29\",\"30\"],[\"\"],[\"\"],[\"\"],[\"\"],[\"1\",\"2\",\"3\",\"4\",\"5\",\"6\",\"7\",\"8\"],"</span> +</div><div class="line">            <span class="string">"[\"\"],[\"\"]]&#125;,\"defferedInfo\":&#123;\"year\":2017,\"day\":[[\"22\"],[\"4\"],[\"\"],[\"1\"],[\"27\"],[\"\"],[\"\"],[\"\"],[\"30\"],[\"\"],[\"\"],[\"\"]]&#125;&#125;"</span>;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="获取节假日数据"><a href="#获取节假日数据" class="headerlink" title="获取节假日数据"></a>获取节假日数据</h4><p><strong>1 定义数据类型</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@IntDef</span>(&#123;HolidayType.HOLIDAY, HolidayType.DEFFERED&#125;)</div><div class="line"><span class="meta">@Retention</span>(RetentionPolicy.SOURCE)</div><div class="line"><span class="keyword">public</span> <span class="meta">@interface</span> HolidayType &#123;</div><div class="line">    <span class="comment">//节假日</span></div><div class="line">    <span class="keyword">int</span> HOLIDAY = <span class="number">1</span>;</div><div class="line">    <span class="comment">//补休日</span></div><div class="line">    <span class="keyword">int</span> DEFFERED = <span class="number">2</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这是一个注解，使用这个注解的变量的值范围需要在<code>@IntDef</code>规定的值当中，如果值不是<code>HolidayType.HOLIDAY</code>和<code>HolidayType.DEFFERED</code>，编辑器会提示警告。<br><code>@Retention(RetentionPolicy.SOURCE)</code>表示注解只在源码中有效，在编译期失效。</p>
+<p><strong>2 获取节假日数据</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//节假日 年/月/月节假日列表</span></div><div class="line"><span class="keyword">private</span> SparseArray&lt;SparseArray&lt;List&lt;Integer&gt;&gt;&gt; holidayArray;</div><div class="line"><span class="comment">//补休日</span></div><div class="line"><span class="keyword">private</span> SparseArray&lt;SparseArray&lt;List&lt;Integer&gt;&gt;&gt; defferedArray;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">getHoliday</span><span class="params">(Calendar calendar, @HolidayType <span class="keyword">int</span> type)</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">int</span> year = calendar.get(Calendar.YEAR);</div><div class="line">    <span class="keyword">int</span> month = calendar.get(Calendar.MONTH);</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (year &lt; <span class="number">2013</span>) <span class="keyword">return</span> <span class="keyword">new</span> ArrayList&lt;&gt;();</div><div class="line"></div><div class="line">    SparseArray&lt;SparseArray&lt;List&lt;Integer&gt;&gt;&gt; yearArray;</div><div class="line">    <span class="keyword">if</span> (type == HolidayType.HOLIDAY) &#123;</div><div class="line">        yearArray = holidayArray;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        yearArray = defferedArray;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (yearArray == <span class="keyword">null</span>) &#123;</div><div class="line">        yearArray = <span class="keyword">new</span> SparseArray&lt;&gt;();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    SparseArray&lt;List&lt;Integer&gt;&gt; monthArray = yearArray.get(year);</div><div class="line">    <span class="keyword">if</span> (monthArray == <span class="keyword">null</span>) &#123;</div><div class="line">        monthArray = <span class="keyword">new</span> SparseArray&lt;&gt;();</div><div class="line">        yearArray.put(year, monthArray);</div><div class="line"></div><div class="line">        String holiday = getHolidayCache().readStringCache(<span class="string">"holiday"</span> + year);</div><div class="line">        <span class="keyword">if</span> (TextUtils.isEmpty(holiday)) &#123;</div><div class="line">            <span class="comment">//仍为空</span></div><div class="line">            <span class="comment">//获取本地类文件定义的</span></div><div class="line">            <span class="keyword">try</span> &#123;</div><div class="line">                Field field = CalendarConst.HolidayConst.class.getDeclaredField(<span class="string">"calendar_holiday_"</span> + year);</div><div class="line">                <span class="keyword">if</span> (field != <span class="keyword">null</span>) &#123;</div><div class="line">                    holiday = field.get(<span class="keyword">null</span>).toString();</div><div class="line">                &#125;</div><div class="line">            &#125; <span class="keyword">catch</span> (Exception e) &#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            <span class="keyword">if</span>(TextUtils.isEmpty(holiday))&#123;</div><div class="line">                <span class="comment">//从网络拉取</span></div><div class="line">                <span class="comment">//getHolidayCache().putString(CalendarConst.SPElementKey.WEEK_FIRST_DAY, holiday);</span></div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (!TextUtils.isEmpty(holiday)) &#123;</div><div class="line">            HolidayInfos holidayInfos = <span class="keyword">new</span> Gson().fromJson(holiday, HolidayInfos.class);</div><div class="line">            <span class="keyword">if</span> (holidayInfos != <span class="keyword">null</span>) &#123;</div><div class="line">                HolidayInfo info;</div><div class="line">                <span class="keyword">if</span> (type == HolidayType.HOLIDAY) &#123;</div><div class="line">                    info = holidayInfos.getHolidayInfo();</div><div class="line">                &#125; <span class="keyword">else</span> &#123;</div><div class="line">                    info = holidayInfos.getDefferedInfo();</div><div class="line">                &#125;</div><div class="line">                <span class="keyword">if</span> (info != <span class="keyword">null</span>) &#123;</div><div class="line">                    String[][] day = info.getDay();</div><div class="line">                    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; day.length; i++) &#123;</div><div class="line">                        List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList();</div><div class="line">                        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; day[i].length; j++) &#123;</div><div class="line">                            <span class="keyword">if</span> (TextUtils.isEmpty(day[i][j])) &#123;</div><div class="line">                                <span class="keyword">continue</span>;</div><div class="line">                            &#125;</div><div class="line">                            <span class="keyword">try</span> &#123;</div><div class="line">                                list.add(Integer.parseInt(day[i][j]));</div><div class="line">                            &#125; <span class="keyword">catch</span> (NumberFormatException e) &#123;</div><div class="line">                                e.printStackTrace();</div><div class="line">                            &#125;</div><div class="line">                        &#125;</div><div class="line">                        monthArray.put(i, list);</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (monthArray != <span class="keyword">null</span> &amp;&amp; monthArray.get(month) != <span class="keyword">null</span>) &#123;</div><div class="line">        <span class="keyword">return</span> monthArray.get(month);</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ArrayList&lt;&gt;();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment">* 获取指定年月的节假日数据</span></div><div class="line"><span class="comment">*</span></div><div class="line"><span class="comment">* <span class="doctag">@param</span> calendar</span></div><div class="line"><span class="comment">* <span class="doctag">@return</span> 指定月份的节假日期数组</span></div><div class="line"><span class="comment">*/</span></div><div class="line"><span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">getHoliday</span><span class="params">(Calendar calendar)</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> getHoliday(calendar, HolidayType.HOLIDAY);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment">* 获取指定年月的补休日数据</span></div><div class="line"><span class="comment">*</span></div><div class="line"><span class="comment">* <span class="doctag">@param</span> calendar</span></div><div class="line"><span class="comment">* <span class="doctag">@return</span> 指定月份的补休日期数组</span></div><div class="line"><span class="comment">*/</span></div><div class="line"><span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">getDeffered</span><span class="params">(Calendar calendar)</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> getHoliday(calendar, HolidayType.DEFFERED);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>HolidayInfos类：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HolidayInfos</span> </span>&#123;</div><div class="line">    <span class="comment">//补休日</span></div><div class="line">    <span class="keyword">private</span> HolidayInfo defferedInfo;</div><div class="line">    <span class="comment">//节假日</span></div><div class="line">    <span class="keyword">private</span> HolidayInfo holidayInfo;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> HolidayInfo <span class="title">getDefferedInfo</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> defferedInfo;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setDefferedInfo</span><span class="params">(HolidayInfo defferedInfo)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.defferedInfo = defferedInfo;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> HolidayInfo <span class="title">getHolidayInfo</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> holidayInfo;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setHolidayInfo</span><span class="params">(HolidayInfo holidayInfo)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.holidayInfo = holidayInfo;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>HolidayInfo类：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HolidayInfo</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">int</span> year;</div><div class="line">    <span class="keyword">private</span> String[][] day;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getYear</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.year;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setYear</span><span class="params">(<span class="keyword">int</span> year)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.year = year;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> String[][] getDay() &#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.day;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setDay</span><span class="params">(String[][] day)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.day = day;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="获取周末数据"><a href="#获取周末数据" class="headerlink" title="获取周末数据"></a>获取周末数据</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment">* 获取一个月所有的周末</span></div><div class="line"><span class="comment">*</span></div><div class="line"><span class="comment">* <span class="doctag">@param</span> calendar</span></div><div class="line"><span class="comment">* <span class="doctag">@param</span> date     &#123;<span class="doctag">@link</span> Calendar#DAY_OF_WEEK&#125;</span></div><div class="line"><span class="comment">* <span class="doctag">@return</span></span></div><div class="line"><span class="comment">*/</span></div><div class="line"><span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">getWeekend</span><span class="params">(Calendar calendar, <span class="keyword">int</span> date)</span> </span>&#123;</div><div class="line">    SparseArray&lt;SparseArray&lt;List&lt;Integer&gt;&gt;&gt; dateArray = <span class="keyword">null</span>;</div><div class="line">    <span class="keyword">if</span> (date == Calendar.SATURDAY) &#123;</div><div class="line">        dateArray = saturdayArray;</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (date == Calendar.SUNDAY) &#123;</div><div class="line">        dateArray = sundayArray;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (dateArray == <span class="keyword">null</span>) &#123;</div><div class="line">        dateArray = <span class="keyword">new</span> SparseArray&lt;&gt;();</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">int</span> year = calendar.get(Calendar.YEAR);</div><div class="line">    <span class="keyword">int</span> month = calendar.get(Calendar.MONTH);</div><div class="line"></div><div class="line">    SparseArray&lt;List&lt;Integer&gt;&gt; monthArray = dateArray.get(year);</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (monthArray == <span class="keyword">null</span>) &#123;</div><div class="line">        monthArray = <span class="keyword">new</span> SparseArray&lt;&gt;();</div><div class="line">        dateArray.put(year, monthArray);</div><div class="line">    &#125;</div><div class="line">    List&lt;Integer&gt; dateList = monthArray.get(month);</div><div class="line">    <span class="keyword">if</span> (dateList == <span class="keyword">null</span>) &#123;</div><div class="line">        dateList = <span class="keyword">new</span> ArrayList&lt;&gt;();</div><div class="line">        Calendar tmpCalendar = Calendar.getInstance();</div><div class="line">        tmpCalendar.set(year, month, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line">        <span class="keyword">int</span> tmpMonth;</div><div class="line">        <span class="keyword">do</span> &#123;</div><div class="line">            <span class="keyword">int</span> day = tmpCalendar.get(Calendar.DAY_OF_WEEK);</div><div class="line">            <span class="keyword">if</span> (day == date) &#123;</div><div class="line">                dateList.add(tmpCalendar.get(Calendar.DATE));</div><div class="line">            &#125;</div><div class="line">            tmpCalendar.add(Calendar.DATE, <span class="number">1</span>);</div><div class="line">            tmpMonth = tmpCalendar.get(Calendar.MONTH);</div><div class="line">        &#125; <span class="keyword">while</span> (tmpMonth == month);</div><div class="line">        monthArray.put(month, dateList);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (monthArray != <span class="keyword">null</span> &amp;&amp; monthArray.get(month) != <span class="keyword">null</span>) &#123;</div><div class="line">        <span class="keyword">return</span> monthArray.get(month);</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ArrayList&lt;&gt;();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="获取一个月的数据"><a href="#获取一个月的数据" class="headerlink" title="获取一个月的数据"></a>获取一个月的数据</h2><h3 id="日期实体类"><a href="#日期实体类" class="headerlink" title="日期实体类"></a>日期实体类</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment"> * 日期实体类</span></div><div class="line"><span class="comment"> */</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DayInfo</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">int</span> year = <span class="number">0</span>, month = <span class="number">0</span>, day = <span class="number">0</span>;</div><div class="line">    <span class="keyword">private</span> Calendar calendar = Calendar.getInstance();</div><div class="line">    <span class="comment">//节假日,补休日</span></div><div class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span> isHoliday = <span class="keyword">false</span>, isDeferred = <span class="keyword">false</span>;</div><div class="line">    <span class="comment">//今天，周六，周日</span></div><div class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span> isToday = <span class="keyword">false</span>, isSaturday = <span class="keyword">false</span>, isSunday;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DayInfo</span><span class="params">()</span> </span>&#123;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DayInfo</span><span class="params">(Calendar calendar)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.year = calendar.get(Calendar.YEAR);</div><div class="line">        <span class="keyword">this</span>.month = calendar.get(Calendar.MONTH);</div><div class="line">        <span class="keyword">this</span>.day = calendar.get(Calendar.DATE);</div><div class="line">        <span class="keyword">this</span>.calendar.set(year, month, day, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line">        <span class="keyword">this</span>.calendar.set(Calendar.MILLISECOND, <span class="number">0</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getYear</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> year;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setYear</span><span class="params">(<span class="keyword">int</span> year)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.year = year;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getMonth</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> month;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setMonth</span><span class="params">(<span class="keyword">int</span> month)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.month = month;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getDay</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> day;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setDay</span><span class="params">(<span class="keyword">int</span> day)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.day = day;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isHoliday</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> isHoliday;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setHoliday</span><span class="params">(<span class="keyword">boolean</span> holiday)</span> </span>&#123;</div><div class="line">        isHoliday = holiday;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isToday</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> isToday;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setToday</span><span class="params">(<span class="keyword">boolean</span> today)</span> </span>&#123;</div><div class="line">        isToday = today;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isSaturday</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> isSaturday;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setSaturday</span><span class="params">(<span class="keyword">boolean</span> saturday)</span> </span>&#123;</div><div class="line">        isSaturday = saturday;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isSunday</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> isSunday;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setSunday</span><span class="params">(<span class="keyword">boolean</span> sunday)</span> </span>&#123;</div><div class="line">        isSunday = sunday;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isDeferred</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> isDeferred;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setDeferred</span><span class="params">(<span class="keyword">boolean</span> deferred)</span> </span>&#123;</div><div class="line">        isDeferred = deferred;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> Calendar <span class="title">getCalendar</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> calendar;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setCalendar</span><span class="params">(Calendar calendar)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.calendar = calendar;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="获取一周的数据"><a href="#获取一周的数据" class="headerlink" title="获取一周的数据"></a>获取一周的数据</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment">* 获取传入周首日所在周的数据</span></div><div class="line"><span class="comment">*</span></div><div class="line"><span class="comment">* <span class="doctag">@param</span> calendar 周首日</span></div><div class="line"><span class="comment">* <span class="doctag">@return</span></span></div><div class="line"><span class="comment">*/</span></div><div class="line"><span class="function"><span class="keyword">public</span> List&lt;DayInfo&gt; <span class="title">buildWeekDayInfoList</span><span class="params">(Calendar calendar)</span> </span>&#123;</div><div class="line">    List&lt;DayInfo&gt; dayInfoList = <span class="keyword">new</span> ArrayList&lt;&gt;();</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">7</span>; j++) &#123;</div><div class="line">        DayInfo dayInfo = <span class="keyword">new</span> DayInfo(calendar);</div><div class="line">        <span class="comment">//节假日</span></div><div class="line">        <span class="keyword">if</span> (getHoliday(calendar).contains(dayInfo.getDay())) &#123;</div><div class="line">            dayInfo.setHoliday(<span class="keyword">true</span>);</div><div class="line">        &#125;</div><div class="line">        <span class="comment">//补休日</span></div><div class="line">        <span class="keyword">if</span> (getDeffered(calendar).contains(dayInfo.getDay())) &#123;</div><div class="line">            dayInfo.setDeferred(<span class="keyword">true</span>);</div><div class="line">        &#125;</div><div class="line">        <span class="comment">//周六</span></div><div class="line">        <span class="keyword">if</span> (getWeekend(calendar, Calendar.SATURDAY).contains(dayInfo.getDay())) &#123;</div><div class="line">            dayInfo.setSaturday(<span class="keyword">true</span>);</div><div class="line">        &#125;</div><div class="line">        <span class="comment">//周日</span></div><div class="line">        <span class="keyword">if</span> (getWeekend(calendar, Calendar.SUNDAY).contains(dayInfo.getDay())) &#123;</div><div class="line">            dayInfo.setSunday(<span class="keyword">true</span>);</div><div class="line">        &#125;</div><div class="line">        <span class="comment">//今天</span></div><div class="line">        <span class="keyword">if</span> (TimeUtils.isToday(calendar)) &#123;</div><div class="line">            dayInfo.setToday(<span class="keyword">true</span>);</div><div class="line">        &#125;</div><div class="line">        dayInfoList.add(dayInfo);</div><div class="line">        calendar.add(Calendar.DATE, <span class="number">1</span>);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> dayInfoList;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">private</span> SparseArray&lt;SparseArray&lt;List&lt;DayInfo&gt;&gt;&gt; weekDayInfoArray;</div><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment">* 获取一周的日期数据</span></div><div class="line"><span class="comment">*</span></div><div class="line"><span class="comment">* <span class="doctag">@param</span> calendar</span></div><div class="line"><span class="comment">* <span class="doctag">@return</span></span></div><div class="line"><span class="comment">*/</span></div><div class="line"><span class="function"><span class="keyword">public</span> List&lt;DayInfo&gt; <span class="title">getWeekDayInfoList</span><span class="params">(Calendar calendar)</span> </span>&#123;</div><div class="line"></div><div class="line">    Calendar tmpCalendar = TimeUtils.copyCalendar(calendar);</div><div class="line">    <span class="keyword">int</span> firstDay = getWeekFirstDay();</div><div class="line">    <span class="keyword">if</span> (firstDay == Calendar.SUNDAY) &#123;</div><div class="line">        TimeUtils.setToSunday(tmpCalendar, <span class="keyword">true</span>);</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        TimeUtils.setToMonday(tmpCalendar, <span class="keyword">false</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">int</span> year = tmpCalendar.get(Calendar.YEAR);</div><div class="line">    <span class="keyword">int</span> week = tmpCalendar.get(Calendar.WEEK_OF_YEAR);</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (weekDayInfoArray == <span class="keyword">null</span>) &#123;</div><div class="line">        weekDayInfoArray = <span class="keyword">new</span> SparseArray&lt;&gt;();</div><div class="line">    &#125;</div><div class="line">    SparseArray&lt;List&lt;DayInfo&gt;&gt; weekArray = weekDayInfoArray.get(year);</div><div class="line">    <span class="keyword">if</span> (weekArray == <span class="keyword">null</span>) &#123;</div><div class="line">        weekArray = <span class="keyword">new</span> SparseArray&lt;&gt;();</div><div class="line">        weekDayInfoArray.put(year, weekArray);</div><div class="line">    &#125;</div><div class="line">    List&lt;DayInfo&gt; dayInfoList = weekArray.get(week);</div><div class="line">    <span class="keyword">if</span> (dayInfoList == <span class="keyword">null</span>) &#123;</div><div class="line">        dayInfoList = buildWeekDayInfoList(tmpCalendar);</div><div class="line">        weekArray.put(week, dayInfoList);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> dayInfoList;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment">* 获取周首日</span></div><div class="line"><span class="comment">*</span></div><div class="line"><span class="comment">* <span class="doctag">@return</span></span></div><div class="line"><span class="comment">*/</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getWeekFirstDay</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> SPUtils.create(mContext, CalendarConst.SPFileName.CALENDAR_SETTING)</div><div class="line">            .getInt(CalendarConst.SPElementKey.WEEK_FIRST_DAY, Calendar.MONDAY);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>周首日通过本地<code>SharedPreferences</code>存储。</p>
+<h3 id="获取一个月的数据-1"><a href="#获取一个月的数据-1" class="headerlink" title="获取一个月的数据"></a>获取一个月的数据</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment">* 构建日历中一页各天的信息数组，第一行和最后一行可能包含上个月的信息</span></div><div class="line"><span class="comment">*</span></div><div class="line"><span class="comment">* <span class="doctag">@param</span> calendar</span></div><div class="line"><span class="comment">* <span class="doctag">@return</span></span></div><div class="line"><span class="comment">*/</span></div><div class="line"><span class="function"><span class="keyword">public</span> List&lt;DayInfo&gt; <span class="title">buildMonthDayInfoList</span><span class="params">(Calendar calendar)</span> </span>&#123;</div><div class="line">    Calendar tmpCalendar = TimeUtils.copyCalendar(calendar);</div><div class="line">    List&lt;DayInfo&gt; dayInfoList = <span class="keyword">new</span> ArrayList&lt;&gt;();</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">6</span>; i++) &#123;</div><div class="line">        dayInfoList.addAll(getWeekDayInfoList(tmpCalendar));</div><div class="line">        tmpCalendar.add(Calendar.DATE, <span class="number">7</span>);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> dayInfoList;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">private</span> SparseArray&lt;SparseArray&lt;List&lt;DayInfo&gt;&gt;&gt; monthDayInfoArray;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment">* 获取一个日历视图日期(42天)的数组，先从缓存中获取，如果没有就建立</span></div><div class="line"><span class="comment">*</span></div><div class="line"><span class="comment">* <span class="doctag">@param</span> calendar 日历当前选中的日期</span></div><div class="line"><span class="comment">* <span class="doctag">@return</span></span></div><div class="line"><span class="comment">*/</span></div><div class="line"><span class="function"><span class="keyword">public</span> List&lt;DayInfo&gt; <span class="title">getMonthDayInfoList</span><span class="params">(Calendar calendar)</span> </span>&#123;</div><div class="line">    <span class="comment">//各个月的数据，HashMap&lt;year_month,DayInfo[][]</span></div><div class="line">    Calendar tmpCalendar = getMonthPeriod(calendar)[<span class="number">0</span>];</div><div class="line"></div><div class="line">    <span class="comment">//考勤日所在年</span></div><div class="line">    <span class="keyword">int</span> year = tmpCalendar.get(Calendar.YEAR);</div><div class="line">    <span class="comment">//考勤日所在月</span></div><div class="line">    <span class="keyword">int</span> month = tmpCalendar.get(Calendar.MONTH);</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (monthDayInfoArray == <span class="keyword">null</span>) &#123;</div><div class="line">        monthDayInfoArray = <span class="keyword">new</span> SparseArray&lt;&gt;();</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//一个月的数据</span></div><div class="line">    SparseArray&lt;List&lt;DayInfo&gt;&gt; monthArray = monthDayInfoArray.get(year);</div><div class="line">    <span class="keyword">if</span> (monthArray == <span class="keyword">null</span>) &#123;</div><div class="line">        monthArray = <span class="keyword">new</span> SparseArray&lt;&gt;();</div><div class="line">        monthDayInfoArray.put(year, monthArray);</div><div class="line">    &#125;</div><div class="line">    List&lt;DayInfo&gt; dayInfoList = monthArray.get(month);</div><div class="line">    <span class="keyword">if</span> (dayInfoList == <span class="keyword">null</span>) &#123;</div><div class="line">        dayInfoList = buildMonthDayInfoList(tmpCalendar);</div><div class="line">        monthArray.put(month, dayInfoList);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> dayInfoList;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> monthFirstDay = <span class="number">1</span>;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment">* 设置月第一天</span></div><div class="line"><span class="comment">*</span></div><div class="line"><span class="comment">* <span class="doctag">@param</span> monthFirstDay</span></div><div class="line"><span class="comment">*/</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">setMonthFirstDay</span><span class="params">(<span class="keyword">int</span> monthFirstDay)</span> </span>&#123;</div><div class="line">    CalendarDataCenter.monthFirstDay = monthFirstDay;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment">* 获取一个月的周期</span></div><div class="line"><span class="comment">*</span></div><div class="line"><span class="comment">* <span class="doctag">@param</span> calendarSelected</span></div><div class="line"><span class="comment">* <span class="doctag">@return</span> 假设1号是月第一天，现在是5月，那么返回的是[5月1日0点,6月1日0点]</span></div><div class="line"><span class="comment">*/</span></div><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> Calendar[] getMonthPeriod(Calendar calendarSelected) &#123;</div><div class="line">    Calendar tmpCalendar = TimeUtils.copyCalendar(calendarSelected);</div><div class="line">    Calendar calendar1 = TimeUtils.copyCalendar(calendarSelected);</div><div class="line">    Calendar calendar2 = TimeUtils.copyCalendar(calendarSelected);</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (calendarSelected.get(Calendar.DATE) &lt; monthFirstDay) &#123;</div><div class="line">        tmpCalendar.add(Calendar.MONTH, -<span class="number">1</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    calendar1.set(tmpCalendar.get(Calendar.YEAR),</div><div class="line">            tmpCalendar.get(Calendar.MONTH),</div><div class="line">            monthFirstDay,</div><div class="line">            <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line">    <span class="comment">//注意必须设毫秒，日历等很多地方都是按毫秒存数据</span></div><div class="line">    calendar1.set(Calendar.MILLISECOND, <span class="number">0</span>);</div><div class="line">    calendar2.setTimeInMillis(calendar1.getTimeInMillis());</div><div class="line">    calendar2.add(Calendar.MONTH, <span class="number">1</span>);</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Calendar[]&#123;calendar1, calendar2&#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Github地址：<a href="https://github.com/Jadyli/SanchiCalendar/blob/master/calendar/src/main/java/com/jady/calendar/model/data/CalendarDataCenter.java" target="_blank" rel="external">https://github.com/Jadyli/SanchiCalendar/blob/master/calendar/src/main/java/com/jady/calendar/model/data/CalendarDataCenter.java</a></p>
+<p>数据准备完成。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>如果您觉得这篇文章不错，可以打赏支持下哦，谢谢</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="Jadyli 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Jadyli 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/bbef91e2/" rel="next" title="React开发笔记(一) 环境搭建和Hello World">
+                <i class="fa fa-chevron-left"></i> React开发笔记(一) 环境搭建和Hello World
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/57f2a8fb/" rel="prev" title="Android日历开发：使用Canvas绘制按周显示和按月显示的日历">
+                Android日历开发：使用Canvas绘制按周显示和按月显示的日历 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Jadyli</p>
+              <p class="site-description motion-element" itemprop="description">三七的博客</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">50</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/Jadyli" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#获取特殊日期"><span class="nav-number">1.</span> <span class="nav-text">获取特殊日期</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#节假日"><span class="nav-number">1.1.</span> <span class="nav-text">节假日</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#节假日、补休日数据"><span class="nav-number">1.1.1.</span> <span class="nav-text">节假日、补休日数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#获取节假日数据"><span class="nav-number">1.1.2.</span> <span class="nav-text">获取节假日数据</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取周末数据"><span class="nav-number">1.2.</span> <span class="nav-text">获取周末数据</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取一个月的数据"><span class="nav-number">2.</span> <span class="nav-text">获取一个月的数据</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#日期实体类"><span class="nav-number">2.1.</span> <span class="nav-text">日期实体类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取一周的数据"><span class="nav-number">2.2.</span> <span class="nav-text">获取一周的数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取一个月的数据-1"><span class="nav-number">2.3.</span> <span class="nav-text">获取一个月的数据</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1264747959'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s19.cnzz.com/z_stat.php%3Fid%3D1264747959%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jadyli</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
