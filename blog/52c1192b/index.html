@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="[TOC] 概述前面我们介绍了如何使用Gson解析和创建json，这里我们继续介绍如何使用泛型来封装服务器回调。本文主要的技术点有  使用类的泛型和方法的泛型 结合gson封装服务器json回调  1 建立通用的回调Model以这个服务器回调为例。 12345678&amp;#123;  &quot;server_time&quot;: 1497611816029,  &quot;data&quot;: &amp;#123;    &quot;name&quot;: &quot;j">
+<meta property="og:type" content="article">
+<meta property="og:title" content="android使用gson和泛型解析服务器回调的封装">
+<meta property="og:url" content="https://www.sanqis.com/blog/blog/52c1192b/index.html">
+<meta property="og:site_name" content="今夕何夕">
+<meta property="og:description" content="[TOC] 概述前面我们介绍了如何使用Gson解析和创建json，这里我们继续介绍如何使用泛型来封装服务器回调。本文主要的技术点有  使用类的泛型和方法的泛型 结合gson封装服务器json回调  1 建立通用的回调Model以这个服务器回调为例。 12345678&amp;#123;  &quot;server_time&quot;: 1497611816029,  &quot;data&quot;: &amp;#123;    &quot;name&quot;: &quot;j">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-11-21T06:24:46.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="android使用gson和泛型解析服务器回调的封装">
+<meta name="twitter:description" content="[TOC] 概述前面我们介绍了如何使用Gson解析和创建json，这里我们继续介绍如何使用泛型来封装服务器回调。本文主要的技术点有  使用类的泛型和方法的泛型 结合gson封装服务器json回调  1 建立通用的回调Model以这个服务器回调为例。 12345678&amp;#123;  &quot;server_time&quot;: 1497611816029,  &quot;data&quot;: &amp;#123;    &quot;name&quot;: &quot;j">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://www.sanqis.com/blog/blog/52c1192b/"/>
+
+
+
+
+
+  <title>android使用gson和泛型解析服务器回调的封装 | 今夕何夕</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">今夕何夕</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">博客</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://www.sanqis.com/blog/blog/52c1192b/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jadyli">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="今夕何夕">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">android使用gson和泛型解析服务器回调的封装</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-09T11:47:20+08:00">
+                2017-06-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>[TOC]</p>
+<h4 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h4><p>前面我们介绍了如何<a href="http://blog.csdn.net/u013005791/article/details/51190060" target="_blank" rel="external">使用Gson解析和创建json</a>，这里我们继续介绍如何使用泛型来封装服务器回调。<br>本文主要的技术点有</p>
+<ul>
+<li>使用类的泛型和方法的泛型</li>
+<li>结合gson封装服务器json回调</li>
+</ul>
+<h2 id="1-建立通用的回调Model"><a href="#1-建立通用的回调Model" class="headerlink" title="1 建立通用的回调Model"></a>1 建立通用的回调Model</h2><p>以这个服务器回调为例。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"server_time"</span>: <span class="number">1497611816029</span>,</div><div class="line">  <span class="attr">"data"</span>: &#123;</div><div class="line">    <span class="attr">"name"</span>: <span class="string">"jady"</span>,</div><div class="line">    <span class="attr">"age"</span>: <span class="number">12</span></div><div class="line">  &#125;,</div><div class="line">  <span class="attr">"success"</span>: <span class="literal">true</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个json里面<code>server_time</code>和<code>success</code>的类型是固定不变的，但是data的类型却会经常改变，比如这里传回来的是<code>User</code>,另一个接口传回来的可能就是<code>Student</code>了。<br>首先建立对应的类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ServerCallbackModel</span>&lt;<span class="title">T</span>&gt; </span>&#123;</div><div class="line"></div><div class="line">   <span class="keyword">private</span> <span class="keyword">long</span> server_time;</div><div class="line">    <span class="keyword">private</span> T data;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span> success;</div><div class="line">    <span class="keyword">private</span> String err_code;</div><div class="line">    <span class="keyword">private</span> String message;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">getServer_time</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> server_time;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setServer_time</span><span class="params">(<span class="keyword">long</span> server_time)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.server_time = server_time;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> T <span class="title">getData</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> data;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setData</span><span class="params">(T data)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.data = data;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isSuccess</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> success;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setSuccess</span><span class="params">(<span class="keyword">boolean</span> success)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.success = success;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getErr_code</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> err_code;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setErr_code</span><span class="params">(String err_code)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.err_code = err_code;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getMessage</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> message;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setMessage</span><span class="params">(String message)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.message = message;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="2-封装服务器回调"><a href="#2-封装服务器回调" class="headerlink" title="2 封装服务器回调"></a>2 封装服务器回调</h2><p>这里我们写的服务器回调是基于已经拿到服务器回调的json字符串。</p>
+<h3 id="2-1-回调的抽象基类："><a href="#2-1-回调的抽象基类：" class="headerlink" title="2.1 回调的抽象基类："></a>2.1 回调的抽象基类：</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">HttpCallback</span>&lt;<span class="title">T</span>&gt; </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String TAG = <span class="string">"HttpCallback"</span>;</div><div class="line"></div><div class="line">    <span class="keyword">protected</span> Type genericityType;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">HttpCallback</span><span class="params">()</span> </span>&#123;</div><div class="line">        Type genericSuperclass = getClass().getGenericSuperclass();</div><div class="line">        <span class="keyword">if</span> (genericSuperclass <span class="keyword">instanceof</span> ParameterizedType) &#123;</div><div class="line">            <span class="keyword">this</span>.genericityType = ((ParameterizedType) genericSuperclass).getActualTypeArguments()[<span class="number">0</span>];</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">this</span>.genericityType = Object.class;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">onResolve</span><span class="params">(T t)</span></span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">onFailed</span><span class="params">(String err_code, String message)</span></span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> Type <span class="title">getGenericityType</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> genericityType;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里定义了一个构造方法，两个抽象方法，我们先看构造方法，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Type genericSuperclass = getClass().getGenericSuperclass();</div><div class="line"><span class="keyword">if</span> (genericSuperclass <span class="keyword">instanceof</span> ParameterizedType) &#123;</div><div class="line">     <span class="keyword">this</span>.genericityType = ((ParameterizedType) genericSuperclass).getActualTypeArguments()[<span class="number">0</span>];</div><div class="line">&#125; <span class="keyword">else</span> &#123;</div><div class="line">     <span class="keyword">this</span>.genericityType = Object.class;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>Type:</strong> Java中所有类型的公共高级接口。它们包括原始类型、参数化类型、数组类型、类型变量和基本类型。<br><strong>getGenericSuperclass()获得带有泛型的父类:</strong> 获得带有泛型的父类。<br><strong>ParameterizedType:</strong> 参数化类型，即泛型。<br><strong>getActualTypeArguments：</strong>获取参数化类型的数组，泛型参数可能有多个</p>
+</blockquote>
+<p><code>getActualTypeArguments()[0]</code>得到了泛型的第一个参数T的类型，赋值给代表当前类泛型类型的成员变量<code>genericityType</code>。如果不是参数化类型，比如在接收服务器回调的地方没有加泛型类型，那么我们就给<code>genericityType</code>赋值Object的class对象。</p>
+<p><code>genericityType</code>是用来在后面作为Gson解析的类型参数的。</p>
+<p>再来看看抽象方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">onResolve</span><span class="params">(String json)</span></span>;</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">onFailed</span><span class="params">(String err_code, String message)</span></span>;</div></pre></td></tr></table></figure>
+<p>聪明的你一定发现了没有<code>onSuccess()</code>，别急，看到后面你就明白了。<br><code>onResolve()</code>就是用来解析json的了，子类需要重写它来具体解析。<br><code>onFailed</code>是错误回调。</p>
+<h3 id="2-2-针对刚才服务器对象封装的抽象子类"><a href="#2-2-针对刚才服务器对象封装的抽象子类" class="headerlink" title="2.2 针对刚才服务器对象封装的抽象子类"></a>2.2 针对刚才服务器对象封装的抽象子类</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">ServerCallback</span>&lt;<span class="title">T</span>, <span class="title">V</span>&gt; <span class="keyword">extends</span> <span class="title">HttpCallback</span>&lt;<span class="title">T</span>&gt;</span>&#123;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onResolve</span><span class="params">(String json)</span> </span>&#123;</div><div class="line">        <span class="keyword">boolean</span> returnJson = <span class="keyword">false</span>;</div><div class="line">        <span class="keyword">if</span> (genericityType <span class="keyword">instanceof</span> Class) &#123;</div><div class="line">            <span class="keyword">switch</span> (((Class) genericityType).getSimpleName()) &#123;</div><div class="line">                <span class="keyword">case</span> <span class="string">"Object"</span>:</div><div class="line">                <span class="keyword">case</span> <span class="string">"String"</span>:</div><div class="line">                    returnJson = <span class="keyword">true</span>;</div><div class="line">                    <span class="keyword">break</span>;</div><div class="line">                <span class="keyword">default</span>:</div><div class="line">                    <span class="keyword">break</span>;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (returnJson) &#123;</div><div class="line">            onSuccess((V) json);</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            T t = (<span class="keyword">new</span> Gson()).fromJson(json, genericityType);</div><div class="line">            <span class="keyword">if</span> (t <span class="keyword">instanceof</span> ServerCallbackModel) &#123;</div><div class="line">                ServerCallbackModel&lt;V&gt; callbackData = (ServerCallbackModel) t;</div><div class="line">                V result = callbackData.getData();</div><div class="line">                <span class="keyword">if</span> (callbackData.isSuccess()) &#123;</div><div class="line">                    <span class="keyword">this</span>.onSuccess(result);</div><div class="line">                &#125; <span class="keyword">else</span> &#123;</div><div class="line">                    onFailed(callbackData.getErr_code(), callbackData.getMessage());</div><div class="line">                &#125;</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                onSuccess((V) t);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onFailed</span><span class="params">(String error_code, String error_message)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (enableShowToast()) &#123;</div><div class="line">            Toast.makeText(HttpManager.mContext, error_message, Toast.LENGTH_SHORT).show();</div><div class="line">        &#125;</div><div class="line">        onFailure(error_code, error_message);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">onSuccess</span><span class="params">(V data)</span></span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">onFailure</span><span class="params">(String error_code, String error_message)</span></span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">enableShowToast</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>首先，我们定义了一个抽象的带两个类型参数的泛型类，第一个参数是<code>Gson</code>映射的外层对象，比如可以传入我们刚才定义的<code>ServerCallbackModel</code>,第二个参数就是外层对象中的数据了，比如<code>ServerCallbackModel</code>中的data。</p>
+<p>然后来分析下类中的方法，先来看看非抽象的方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onResolve</span><span class="params">(String json)</span></span></div></pre></td></tr></table></figure>
+<p>这个方法用来解析服务器回调，参数json就是服务器回调的json字符串。<br>首先判断泛型类型<code>genericityType</code>是不是<code>Class</code>类型的，然后判断<code>genericityType</code>的名字是否为<code>String</code>或者<code>Object</code>，是则直接在成功回调中传入json字符串。<br>如果不是，则用Gson将json解析出来，实参就是<code>genericityType</code>。此时解析出来的类型如果是我们刚才定义的<code>ServerCallbackModel</code>，如果服务器返回成功，那就将data返回，data的类型就是这个类的第二个类型参数，也是<code>onSuccess</code>的形参类型，我们最终需要的数据。<br>如果服务器返回失败，会将错误传递给onFailed。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onFailed</span><span class="params">(String error_code, String error_message)</span></span></div></pre></td></tr></table></figure>
+<p>这个方法主要是拦截错误，用于统一处理所有请求的错误。默认只判断是否需要直接弹toast显示错误信息。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">enableShowToast</span><span class="params">()</span></span></div></pre></td></tr></table></figure>
+<p>我们可以考虑是否直接将错误信息弹窗提示出来，只需要重写<code>enableShowToast</code>方法，返回<code>true</code>即可。</p>
+<p>再来看看抽象方法，这个就是我们最终在具体的业务层需要重写的方法了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">onSuccess</span><span class="params">(V data)</span></span>;</div></pre></td></tr></table></figure>
+<p>服务器返回成功的信息后，数据会传递到这里。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">onFailure</span><span class="params">(String error_code, String error_message)</span></span>;</div></pre></td></tr></table></figure>
+<p>错误经过<code>onFailed</code>拦截后，会传递到这里。</p>
+<h2 id="3-使用封装的回调"><a href="#3-使用封装的回调" class="headerlink" title="3 使用封装的回调"></a>3 使用封装的回调</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">HttpCallback callback = <span class="keyword">new</span> TmpCallback&lt;ServerCallbackModel&lt;User&gt;,User&gt;() &#123;</div><div class="line"></div><div class="line">   <span class="meta">@Override</span></div><div class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onSuccess</span><span class="params">(User data)</span> </span>&#123;</div><div class="line"></div><div class="line">   &#125;</div><div class="line"></div><div class="line">   <span class="meta">@Override</span></div><div class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onFailure</span><span class="params">(String error_code, String error_message)</span> </span>&#123;</div><div class="line"></div><div class="line">   &#125;</div><div class="line">&#125;;</div><div class="line">API.testGet(callback);</div></pre></td></tr></table></figure>
+<p>刚才你看到ServerCallback可能还不理解为什么这个泛型要有两个参数，看到这里你应该就秒懂了，其实服务器传回来的正确错误什么的，我们并不想每个调用的地方都去判断，我们这里想要的只是最终的数据。<br>本文的Demo地址是我的一个开源库，这个库已经经过了我们公司产品大量用户的考验，欢迎<code>star</code>和<code>fork</code>,也欢迎大家提<code>issue</code>。</p>
+<blockquote>
+<p><strong>RetrofitClient</strong>: <a href="https://github.com/Jadyli/RetrofitClient" target="_blank" rel="external">https://github.com/Jadyli/RetrofitClient</a></p>
+</blockquote>
+<p>里面的封装基本都是按照本文的思路写的，当然也可以有所变化，比如有些接口没有success之类的，直接就是上数据，那就可以使用<a href="https://github.com/Jadyli/RetrofitClient/blob/beta_v0.2/app/src/main/java/com/jady/sample/api/callback/CommonCallback.java" target="_blank" rel="external">CommonCallback</a>。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>如果您觉得这篇文章不错，可以打赏支持下哦，谢谢</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="Jadyli 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Jadyli 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/8e74e36d/" rel="next" title="使用Gson解析和创建json">
+                <i class="fa fa-chevron-left"></i> 使用Gson解析和创建json
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/51c0994b/" rel="prev" title="使用Gradle构建一个完整的Spring Boot项目">
+                使用Gradle构建一个完整的Spring Boot项目 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Jadyli</p>
+              <p class="site-description motion-element" itemprop="description">三七的博客</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">50</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/Jadyli" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-建立通用的回调Model"><span class="nav-number"></span> <span class="nav-text">1 建立通用的回调Model</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-封装服务器回调"><span class="nav-number"></span> <span class="nav-text">2 封装服务器回调</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-回调的抽象基类："><span class="nav-number"></span> <span class="nav-text">2.1 回调的抽象基类：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-针对刚才服务器对象封装的抽象子类"><span class="nav-number"></span> <span class="nav-text">2.2 针对刚才服务器对象封装的抽象子类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-使用封装的回调"><span class="nav-number"></span> <span class="nav-text">3 使用封装的回调</span></a></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1264747959'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s19.cnzz.com/z_stat.php%3Fid%3D1264747959%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jadyli</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

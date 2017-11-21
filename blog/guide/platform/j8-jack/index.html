@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Android 支持所有 Java 7 语言功能，以及一部分 Java 8 语言功能（具体因平台版本而异）。本页介绍您可以使用的新语言功能、如何正确配置项目以使用这些功能，以及您可能遇到的任何已知问题。 注：在为 Android 开发应用时，可以选择使用 Java 8 语言功能。您可以将项目的源和目标兼容性值保留为 Java 7，但仍须使用 JDK 8 进行编译。 支持 Java 8 语言功能需要">
+<meta property="og:type" content="article">
+<meta property="og:title" content="蜗牛计划day04：使用Java8语言功能">
+<meta property="og:url" content="https://www.sanqis.com/blog/blog/guide/platform/j8-jack/index.html">
+<meta property="og:site_name" content="今夕何夕">
+<meta property="og:description" content="Android 支持所有 Java 7 语言功能，以及一部分 Java 8 语言功能（具体因平台版本而异）。本页介绍您可以使用的新语言功能、如何正确配置项目以使用这些功能，以及您可能遇到的任何已知问题。 注：在为 Android 开发应用时，可以选择使用 Java 8 语言功能。您可以将项目的源和目标兼容性值保留为 Java 7，但仍须使用 JDK 8 进行编译。 支持 Java 8 语言功能需要">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-11-21T06:15:26.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="蜗牛计划day04：使用Java8语言功能">
+<meta name="twitter:description" content="Android 支持所有 Java 7 语言功能，以及一部分 Java 8 语言功能（具体因平台版本而异）。本页介绍您可以使用的新语言功能、如何正确配置项目以使用这些功能，以及您可能遇到的任何已知问题。 注：在为 Android 开发应用时，可以选择使用 Java 8 语言功能。您可以将项目的源和目标兼容性值保留为 Java 7，但仍须使用 JDK 8 进行编译。 支持 Java 8 语言功能需要">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://www.sanqis.com/blog/blog/guide/platform/j8-jack/"/>
+
+
+
+
+
+  <title>蜗牛计划day04：使用Java8语言功能 | 今夕何夕</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">今夕何夕</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">博客</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://www.sanqis.com/blog/blog/guide/platform/j8-jack/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jadyli">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="今夕何夕">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">蜗牛计划day04：使用Java8语言功能</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-21T11:55:30+08:00">
+                2017-11-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Android 支持所有 Java 7 语言功能，以及一部分 Java 8 语言功能（具体因平台版本而异）。本页介绍您可以使用的新语言功能、如何正确配置项目以使用这些功能，以及您可能遇到的任何已知问题。</p>
+<p><strong>注</strong>：在为 Android 开发应用时，可以选择使用 Java 8 语言功能。您可以将项目的源和目标兼容性值保留为 Java 7，但仍须使用 JDK 8 进行编译。</p>
+<p>支持 Java 8 语言功能需要一个名为 <a href="https://source.android.google.cn/source/jack.html" target="_blank" rel="external">Jack</a> 的新编译。Jack 仅在 Android Studio 2.1 和更高版本上才受支持。因此，如果要使用 Java 8 语言功能，则需使用 Android Studio 2.1 开发应用。</p>
+<p>如果您已经安装了 Android Studio，请通过点击 <strong>Help &gt; Check for Update</strong>（在 Mac 上，点击 <strong>Android Studio &gt; Check for Updates</strong>）来确保您已更新到最新版本。如果您的工作站尚未安装 IDE，可<a href="https://developer.android.google.cn/studio/" target="_blank" rel="external">在此下载 Android Studio</a>。</p>
+<h2 id="支持的-Java-8-语言功能和-API"><a href="#支持的-Java-8-语言功能和-API" class="headerlink" title="支持的 Java 8 语言功能和 API"></a>支持的 Java 8 语言功能和 API</h2><p>Android 并非支持所有 Java 8 语言功能。不过，以下功能在开发面向 Android 7.0（API 级别 24）的应用时可用：</p>
+<ul>
+<li><a href="https://docs.oracle.com/javase/tutorial/java/IandI/defaultmethods.html" target="_blank" rel="external">默认和静态接口方法</a></li>
+<li><a href="https://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html" target="_blank" rel="external">Lambda 表达式</a>（在 API 级别 23 及更低版本中也可用）</li>
+<li><a href="https://docs.oracle.com/javase/tutorial/java/annotations/repeating.html" target="_blank" rel="external">重复注解</a></li>
+<li><a href="https://docs.oracle.com/javase/tutorial/java/javaOO/methodreferences.html" target="_blank" rel="external">方法引用</a>（在 API 级别 23 及更低版本中也可用）</li>
+<li><a href="https://docs.oracle.com/javase/tutorial/java/annotations/type_annotations.html" target="_blank" rel="external">类型注解</a>（在 API 级别 23 及更低版本中也可用）</li>
+</ul>
+<p><strong>注</strong>：类型注解信息仅在编译时可用，而在运行时不可用。</p>
+<p>要在 Android 的较早版本中测试 Lambda 表达式、方法引用和类型注解，请前往您的 <code>build.gradle</code> 文件，将 <code>compileSdkVersion</code> 和 <code>targetSdkVersion</code> 设置为 23 或更低。您仍需要<a href="#configuration">启用 Jack 工具链</a>以使用这些 Java 8 功能。</p>
+<p>此外，也可使用以下 Java 8 语言 API：</p>
+<ul>
+<li>反映和语言相关 API：<ul>
+<li><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/FunctionalInterface.html" target="_blank" rel="external"><code>java.lang.FunctionalInterface</code></a></li>
+<li><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/annotation/Repeatable.html" target="_blank" rel="external"><code>java.lang.annotation.Repeatable</code></a></li>
+<li><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/reflect/Method.html#isDefault--" target="_blank" rel="external"><code>java.lang.reflect.Method.isDefault()</code></a></li>
+<li>以及与重复注解关联的反映 API，例如 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/reflect/AnnotatedElement.html#getAnnotationsByType-java.lang.Class-" target="_blank" rel="external"><code>AnnotatedElement.getAnnotationsByType(Class)</code></a></li>
+</ul>
+</li>
+<li>实用程序 API：<ul>
+<li><a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/package-summary.html" target="_blank" rel="external"><code>java.util.function</code></a></li>
+<li><a href="https://docs.oracle.com/javase/8/docs/api/java/util/stream/package-summary.html" target="_blank" rel="external"><code>java.util.stream</code></a></li>
+</ul>
+</li>
+</ul>
+<h2 id="启用-Java-8-功能和-Jack-工具链"><a href="#启用-Java-8-功能和-Jack-工具链" class="headerlink" title="启用 Java 8 功能和 Jack 工具链"></a>启用 Java 8 功能和 Jack 工具链</h2><p>要使用新的 Java 8 语言功能，还需使用新的 <a href="https://source.android.google.cn/source/jack.html" target="_blank" rel="external">Jack 工具链</a>。新的 Android 工具链将 Java 源语言编译成 Android 可读取的 Dalvik 可执行文件字节码，且有其自己的 <code>.jack</code> 库格式，在一个工具中提供了大多数工具链功能：重新打包、压缩、模糊化以及 Dalvik 可执行文件分包。</p>
+<p>以下是构建 Android Dalvik 可执行文件可用的两种工具链的对比：</p>
+<ul>
+<li>旧版 javac 工具链：<br><strong>javac</strong> (<code>.java</code> → <code>.class</code>) → <strong>dx</strong> (<code>.class</code> → <code>.dex</code>)</li>
+<li>新版 Jack 工具链：<br><strong>Jack</strong> (<code>.java</code> → <code>.jack</code> → <code>.dex</code>)</li>
+</ul>
+<h3 id="配置-Gradle"><a href="#配置-Gradle" class="headerlink" title="配置 Gradle"></a>配置 Gradle</h3><p>要为您的项目启用 Java 8 语言功能和 Jack，请在模块级别的 <code>build.gradle</code> 文件中输入以下内容：</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">android &#123;</div><div class="line">  ...</div><div class="line">  defaultConfig &#123;</div><div class="line">    ...</div><div class="line">    jackOptions &#123;</div><div class="line">      enabled <span class="keyword">true</span></div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  compileOptions &#123;</div><div class="line">    <span class="keyword">sourceCompatibility</span> JavaVersion.VERSION_1_8</div><div class="line">    <span class="keyword">targetCompatibility</span> JavaVersion.VERSION_1_8</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="已知问题"><a href="#已知问题" class="headerlink" title="已知问题"></a>已知问题</h3><p><a href="https://developer.android.google.cn/tools/building/building-studio.html#instant-run" target="_blank" rel="external">Instant Run</a> 目前不能用于 Jack，在使用新的工具链时将被停用。</p>
+<p>由于 Jack 在编译应用时不生成中间类文件，依赖这些文件的工具目前不能用于 Jack。下面是一些工具示例：</p>
+<ul>
+<li>对类文件进行操作的 Lint 检测工具</li>
+<li>需要应用类文件的工具和库（例如使用 JaCoCo 进行仪器测试中）</li>
+</ul>
+<p>如果您在使用 Jack 的过程中发现其他问题，<a href="http://tools.android.com/filing-bugs" target="_blank" rel="external">请提交错误</a>。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>如果您觉得这篇文章不错，可以打赏支持下哦，谢谢</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="Jadyli 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Jadyli 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/guide/platform/" rel="next" title="蜗牛计划day04：平台架构">
+                <i class="fa fa-chevron-left"></i> 蜗牛计划day04：平台架构
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/guide/practices/verifying-apps-art/" rel="prev" title="蜗牛计划day04：在Android Runtime(ART)上验证应用行为">
+                蜗牛计划day04：在Android Runtime(ART)上验证应用行为 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Jadyli</p>
+              <p class="site-description motion-element" itemprop="description">三七的博客</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">50</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/Jadyli" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#支持的-Java-8-语言功能和-API"><span class="nav-number">1.</span> <span class="nav-text">支持的 Java 8 语言功能和 API</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启用-Java-8-功能和-Jack-工具链"><span class="nav-number">2.</span> <span class="nav-text">启用 Java 8 功能和 Jack 工具链</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置-Gradle"><span class="nav-number">2.1.</span> <span class="nav-text">配置 Gradle</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#已知问题"><span class="nav-number">2.2.</span> <span class="nav-text">已知问题</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1264747959'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s19.cnzz.com/z_stat.php%3Fid%3D1264747959%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jadyli</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

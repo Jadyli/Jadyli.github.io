@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="[TOC] 概述本文主要讲述了如果使用gson来解析含有数组和对象等比较复杂的json,比如对象中含有对象，对象中有list等。首先会介绍如何在Android Studio中使用插件方便的将json映射成对象，然后使用gson实现对象和json的相互转化，最后会详细介绍如何使用泛型封装服务器回调。 如果需要手动解析请参考：Android手动创建和解析Json gson的github地址  A Ja">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Gson解析和创建json">
+<meta property="og:url" content="https://www.sanqis.com/blog/blog/8e74e36d/index.html">
+<meta property="og:site_name" content="今夕何夕">
+<meta property="og:description" content="[TOC] 概述本文主要讲述了如果使用gson来解析含有数组和对象等比较复杂的json,比如对象中含有对象，对象中有list等。首先会介绍如何在Android Studio中使用插件方便的将json映射成对象，然后使用gson实现对象和json的相互转化，最后会详细介绍如何使用泛型封装服务器回调。 如果需要手动解析请参考：Android手动创建和解析Json gson的github地址  A Ja">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-11-21T06:24:46.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用Gson解析和创建json">
+<meta name="twitter:description" content="[TOC] 概述本文主要讲述了如果使用gson来解析含有数组和对象等比较复杂的json,比如对象中含有对象，对象中有list等。首先会介绍如何在Android Studio中使用插件方便的将json映射成对象，然后使用gson实现对象和json的相互转化，最后会详细介绍如何使用泛型封装服务器回调。 如果需要手动解析请参考：Android手动创建和解析Json gson的github地址  A Ja">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://www.sanqis.com/blog/blog/8e74e36d/"/>
+
+
+
+
+
+  <title>使用Gson解析和创建json | 今夕何夕</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">今夕何夕</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">博客</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://www.sanqis.com/blog/blog/8e74e36d/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jadyli">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="今夕何夕">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">使用Gson解析和创建json</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-08T09:31:15+08:00">
+                2017-06-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>[TOC]</p>
+<h4 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h4><p>本文主要讲述了如果使用gson来解析含有数组和对象等比较复杂的json,比如对象中含有对象，对象中有list等。首先会介绍如何在Android Studio中使用插件方便的将json映射成对象，然后使用gson实现对象和json的相互转化，最后会详细介绍如何使用泛型封装服务器回调。</p>
+<p>如果需要手动解析请参考：<a href="http://blog.csdn.net/u013005791/article/details/72904217" target="_blank" rel="external">Android手动创建和解析Json</a></p>
+<p><a href="https://github.com/google/gson" target="_blank" rel="external">gson的github地址</a></p>
+<blockquote>
+<p>A Java serialization/deserialization library to convert Java Objects into JSON and back<br>一个将Java对象转化成json的Java序列化/反序列化库。</p>
+</blockquote>
+<p>gson主要是用用来解析json为对象和将对象转化成json。</p>
+<p><strong>gradle依赖</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">compile &apos;com.google.code.gson:gson:2.8.0&apos;</div></pre></td></tr></table></figure>
+<h2 id="1-创建和json对应的对象"><a href="#1-创建和json对应的对象" class="headerlink" title="1 创建和json对应的对象"></a>1 创建和json对应的对象</h2><p>这个可以使用Android Studio的插件，这里推荐使用<a href="https://github.com/zzz40500/GsonFormat" target="_blank" rel="external">GsonFormat</a>,直接在Android Studio的设置，插件中搜索GsonFormat，安装之后重启即可使用。新建一个Java类，点击菜单栏的code,Generate…,输入json字符串，在左下角的setting中可以勾选split generate,可以分开生成多个对象。<br>勾选use serializedName,可以选择自动添加serializedName注解，这是gson的注解，意思是序列化时的名字，json映射的是这个名字，而不是字段名，不加这个注解就是映射字段名。<br>以下面的json字符串为例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  &quot;students&quot;: [</div><div class="line">    &#123;</div><div class="line">      &quot;name&quot;: &quot;jadyli&quot;,</div><div class="line">      &quot;gender&quot;: &quot;male&quot;,</div><div class="line">      &quot;age&quot;: 18</div><div class="line">    &#125;,</div><div class="line">    &#123;</div><div class="line">      &quot;name&quot;: &quot;Juliet&quot;,</div><div class="line">      &quot;gender&quot;: &quot;female&quot;,</div><div class="line">      &quot;age&quot;: 20</div><div class="line">    &#125;</div><div class="line">  ]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>生成的对象是</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">public class StudentInfo &#123;</div><div class="line"></div><div class="line">    private List&lt;Student&gt; students;</div><div class="line"></div><div class="line">    public List&lt;Student&gt; getStudents() &#123;</div><div class="line">        return students;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void setStudents(List&lt;Student&gt; students) &#123;</div><div class="line">        this.students = students;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public String toString() &#123;</div><div class="line">        return &quot;StudentInfo&#123;&quot; +</div><div class="line">                &quot;students=&quot; + students.toString() +</div><div class="line">                &apos;&#125;&apos;;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line">public class Student &#123;</div><div class="line">    private String name;</div><div class="line">    private String gender;</div><div class="line">    private int age;</div><div class="line"></div><div class="line">    public String getName() &#123;</div><div class="line">        return name;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void setName(String name) &#123;</div><div class="line">        this.name = name;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public String getGender() &#123;</div><div class="line">        return gender;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void setGender(String gender) &#123;</div><div class="line">        this.gender = gender;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public int getAge() &#123;</div><div class="line">        return age;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void setAge(int age) &#123;</div><div class="line">        this.age = age;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public String toString() &#123;</div><div class="line">        return &quot;Student&#123;&quot; +</div><div class="line">                &quot;name=&apos;&quot; + name + &apos;\&apos;&apos; +</div><div class="line">                &quot;, gender=&apos;&quot; + gender + &apos;\&apos;&apos; +</div><div class="line">                &quot;, age=&quot; + age +</div><div class="line">                &apos;&#125;&apos;;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这样一个跟json对应得对象就创建好了。</p>
+<h2 id="2-使用gson解析json"><a href="#2-使用gson解析json" class="headerlink" title="2 使用gson解析json"></a>2 使用gson解析json</h2><h3 id="2-1-解析对象"><a href="#2-1-解析对象" class="headerlink" title="2.1 解析对象"></a>2.1 解析对象</h3><p>解析对象使用fromJson(String json, Class<t> classOfT)，后面的class需要传入具体类型。对象里面有对象或数组也可以自动解析哦。</t></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">String json = &quot;&#123;\&quot;students\&quot;:[&#123;\&quot;name\&quot;:\&quot;jadyli\&quot;,\&quot;gender\&quot;:\&quot;male\&quot;,\&quot;age\&quot;:18&#125;,</div><div class="line">                            &#123;\&quot;name\&quot;:\&quot;Juliet\&quot;,\&quot;gender\&quot;:\&quot;female\&quot;,\&quot;age\&quot;:20&#125;]&#125;&quot;;</div><div class="line">StudentInfo studentInfo = new Gson().fromJson(json, StudentInfo.class);</div><div class="line">System.out.println(studentInfo.toString());</div></pre></td></tr></table></figure>
+<h3 id="2-2-解析数组"><a href="#2-2-解析数组" class="headerlink" title="2.2 解析数组"></a>2.2 解析数组</h3><p>直接解析数组使用fromJson(String json, Type typeOfT)<br>这个Type,可以使用TypeToken类获得，比如<code>new TypeToken&lt;List&lt;Student&gt;&gt;() {}.getType()</code>。<br>这里的例子我们要提高json的复杂度，下面这个json表示班级信息，有两个班级，A班和B班，每个班级有学生若干。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">[</div><div class="line">  &#123;</div><div class="line">    &quot;students&quot;: [</div><div class="line">      &#123;</div><div class="line">        &quot;name&quot;: &quot;jadyli&quot;,</div><div class="line">        &quot;gender&quot;: &quot;male&quot;,</div><div class="line">        &quot;age&quot;: 18</div><div class="line">      &#125;,</div><div class="line">      &#123;</div><div class="line">        &quot;name&quot;: &quot;Juliet&quot;,</div><div class="line">        &quot;gender&quot;: &quot;female&quot;,</div><div class="line">        &quot;age&quot;: 20</div><div class="line">      &#125;</div><div class="line">    ],</div><div class="line">    &quot;class&quot;: &quot;A&quot;</div><div class="line">  &#125;,</div><div class="line">  &#123;</div><div class="line">    &quot;students&quot;: [</div><div class="line">      &#123;</div><div class="line">        &quot;name&quot;: &quot;jack&quot;,</div><div class="line">        &quot;gender&quot;: &quot;male&quot;,</div><div class="line">        &quot;age&quot;: 27</div><div class="line">      &#125;,</div><div class="line">      &#123;</div><div class="line">        &quot;name&quot;: &quot;Avril&quot;,</div><div class="line">        &quot;gender&quot;: &quot;female&quot;,</div><div class="line">        &quot;age&quot;: 17</div><div class="line">      &#125;</div><div class="line">    ],</div><div class="line">    &quot;class&quot;: &quot;B&quot;</div><div class="line">  &#125;</div><div class="line">]</div></pre></td></tr></table></figure>
+<p>根据json创建相应的对象。我们发现，我们的json中含有Java关键字class，这个时候<code>@SerializedName</code>注解就派上用场了，我们把字段给为clssX,同时注解里填上真实的名字<code>class</code>。Student对象不变。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">public class ClassInfo &#123;</div><div class="line"></div><div class="line">    @SerializedName(&quot;class&quot;)</div><div class="line">    private String classX;</div><div class="line">    private List&lt;Student&gt; students;</div><div class="line"></div><div class="line">    public String getClassX() &#123;</div><div class="line">        return classX;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void setClassX(String classX) &#123;</div><div class="line">        this.classX = classX;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public List&lt;Student&gt; getStudents() &#123;</div><div class="line">        return students;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void setStudents(List&lt;Student&gt; students) &#123;</div><div class="line">        this.students = students;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public String toString() &#123;</div><div class="line">        return &quot;ClassInfo&#123;&quot; +</div><div class="line">                &quot;classX=&apos;&quot; + classX + &apos;\&apos;&apos; +</div><div class="line">                &quot;, students=&quot; + students.toString() +</div><div class="line">                &apos;&#125;&apos;;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>解析上面的json数组。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">List&lt;ClassInfo&gt; classInfoList = new Gson().fromJson(&quot;[&quot; +</div><div class="line">                                &quot;&#123;\&quot;students\&quot;:[&#123;\&quot;name\&quot;:\&quot;jadyli\&quot;,\&quot;gender\&quot;:\&quot;male\&quot;,\&quot;age\&quot;:18&#125;,&quot; + &quot;&#123;\&quot;name\&quot;:\&quot;Juliet\&quot;,\&quot;gender\&quot;:\&quot;female\&quot;,\&quot;age\&quot;:20&#125;],\&quot;class\&quot;:\&quot;A\&quot;&#125;,&quot; +</div><div class="line">                                &quot;&#123;\&quot;students\&quot;:[&#123;\&quot;name\&quot;:\&quot;jack\&quot;,\&quot;gender\&quot;:\&quot;male\&quot;,\&quot;age\&quot;:27&#125;,&#123;\&quot;name\&quot;:\&quot;Avril\&quot;,\&quot;gender\&quot;:\&quot;female\&quot;,\&quot;age\&quot;:17&#125;],\&quot;class\&quot;:\&quot;B\&quot;&#125;]&quot;,</div><div class="line">                        new TypeToken&lt;List&lt;ClassInfo&gt;&gt;() &#123;</div><div class="line">                        &#125;.getType());</div><div class="line">                System.out.println(classInfoList.toString());</div></pre></td></tr></table></figure>
+<h2 id="3-使用gson生成json"><a href="#3-使用gson生成json" class="headerlink" title="3 使用gson生成json"></a>3 使用gson生成json</h2><p>一般toJson(Object src)方法就够用了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">String[] names = &#123;&quot;jadyli&quot;, &quot;Juliet&quot;&#125;;</div><div class="line">String[] genders = &#123;&quot;male&quot;, &quot;female&quot;&#125;;</div><div class="line">int[] ages = &#123;18, 20&#125;;</div><div class="line">List&lt;Student&gt; students = new ArrayList&lt;&gt;();</div><div class="line">for (int i = 0; i &lt; names.length; i++) &#123;</div><div class="line">    Student student = new Student();</div><div class="line">    student.setName(names[i]);</div><div class="line">    student.setGender(genders[i]);</div><div class="line">    student.setAge(ages[i]);</div><div class="line">    students.add(student);</div><div class="line">&#125;</div><div class="line">String jsonStr = new Gson().toJson(students);</div><div class="line">System.out.println(jsonStr);</div></pre></td></tr></table></figure>
+<p>new Gson().toJson(Object src)输出的是没有格式化的json字符串，要是想输出格式化了的，可以使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Gson gson = new GsonBuilder().setPrettyPrinting().create();</div><div class="line">String jsonStr = gson.toJson(students);</div></pre></td></tr></table></figure>
+<p>默认忽略空的字段，如果不想忽略，可以使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Gson gson = new GsonBuilder().serializeNulls().create();</div><div class="line">String jsonStr = gson.toJson(students);</div></pre></td></tr></table></figure>
+<h2 id="4-特殊用法"><a href="#4-特殊用法" class="headerlink" title="4 特殊用法"></a>4 特殊用法</h2><p><strong>不映射特定成员变量</strong><br>加上<code>@Expose</code>注解。然后使用的时候用如下语句创建gson对象。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()</div></pre></td></tr></table></figure>
+<p><strong>不映射特定修饰符的成员变量</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Gson gson = new GsonBuilder()</div><div class="line">    .excludeFieldsWithModifiers(Modifier.STATIC, Modifier.TRANSIENT, Modifier.VOLATILE)</div><div class="line">    .create();</div></pre></td></tr></table></figure>
+<p>上面的代码会排除<code>static</code>、<code>transient</code>、<code>volatile</code>修饰的成员变量。</p>
+<p><strong>指定排除策略</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line">@Retention(RetentionPolicy.RUNTIME)</div><div class="line">@Target(&#123;ElementType.FIELD&#125;)</div><div class="line">public @interface Foo &#123;</div><div class="line">  // Field tag only annotation</div><div class="line">&#125;</div><div class="line"></div><div class="line">public class SampleObjectForTest &#123;</div><div class="line">  @Foo private final int annotatedField;</div><div class="line">  private final String stringField;</div><div class="line">  private final long longField;</div><div class="line">  private final Class&lt;?&gt; clazzField;</div><div class="line"></div><div class="line">  public SampleObjectForTest() &#123;</div><div class="line">    annotatedField = 5;</div><div class="line">    stringField = &quot;someDefaultValue&quot;;</div><div class="line">    longField = 1234;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public class MyExclusionStrategy implements ExclusionStrategy &#123;</div><div class="line">  private final Class&lt;?&gt; typeToSkip;</div><div class="line"></div><div class="line">  private MyExclusionStrategy(Class&lt;?&gt; typeToSkip) &#123;</div><div class="line">    this.typeToSkip = typeToSkip;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  public boolean shouldSkipClass(Class&lt;?&gt; clazz) &#123;</div><div class="line">    return (clazz == typeToSkip);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  public boolean shouldSkipField(FieldAttributes f) &#123;</div><div class="line">    return f.getAnnotation(Foo.class) != null;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public static void main(String[] args) &#123;</div><div class="line">  Gson gson = new GsonBuilder()</div><div class="line">      .setExclusionStrategies(new MyExclusionStrategy(String.class))</div><div class="line">      .serializeNulls()</div><div class="line">      .create();</div><div class="line">  SampleObjectForTest src = new SampleObjectForTest();</div><div class="line">  String json = gson.toJson(src);</div><div class="line">  System.out.println(json);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="4-服务器json回调解析实例"><a href="#4-服务器json回调解析实例" class="headerlink" title="4 服务器json回调解析实例"></a>4 服务器json回调解析实例</h2><p>这个比较复杂，放到了下一篇博客<a href="http://blog.csdn.net/u013005791/article/details/72956132" target="_blank" rel="external">android使用gson和泛型解析服务器回调的封装</a></p>
+<p><a href="https://github.com/Jadyli/JsonDemo" target="_blank" rel="external">本文的demo地址</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>如果您觉得这篇文章不错，可以打赏支持下哦，谢谢</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="Jadyli 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Jadyli 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/3f9f8bf0/" rel="next" title="Android手动创建和解析Json">
+                <i class="fa fa-chevron-left"></i> Android手动创建和解析Json
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/52c1192b/" rel="prev" title="android使用gson和泛型解析服务器回调的封装">
+                android使用gson和泛型解析服务器回调的封装 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Jadyli</p>
+              <p class="site-description motion-element" itemprop="description">三七的博客</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">50</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/Jadyli" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-创建和json对应的对象"><span class="nav-number"></span> <span class="nav-text">1 创建和json对应的对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-使用gson解析json"><span class="nav-number"></span> <span class="nav-text">2 使用gson解析json</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-解析对象"><span class="nav-number"></span> <span class="nav-text">2.1 解析对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-解析数组"><span class="nav-number"></span> <span class="nav-text">2.2 解析数组</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-使用gson生成json"><span class="nav-number"></span> <span class="nav-text">3 使用gson生成json</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-特殊用法"><span class="nav-number"></span> <span class="nav-text">4 特殊用法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-服务器json回调解析实例"><span class="nav-number"></span> <span class="nav-text">4 服务器json回调解析实例</span></a></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1264747959'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s19.cnzz.com/z_stat.php%3Fid%3D1264747959%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jadyli</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
