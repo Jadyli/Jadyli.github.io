@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1.常用的sqlite语句创建数据库1sqlite3 DatabaseName.db 创建表1234567sqlite&amp;gt; CREATE TABLE COMPANY(   ID INT PRIMARY KEY   NOT NULL,   NAME           TEXT    NOT NULL,   AGE            INT     NOT NULL,   ADDRESS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SQLite常用命令及Android数据库操作详解">
+<meta property="og:url" content="https://www.sanqis.com/blog/blog/f922435e/index.html">
+<meta property="og:site_name" content="今夕何夕">
+<meta property="og:description" content="1.常用的sqlite语句创建数据库1sqlite3 DatabaseName.db 创建表1234567sqlite&amp;gt; CREATE TABLE COMPANY(   ID INT PRIMARY KEY   NOT NULL,   NAME           TEXT    NOT NULL,   AGE            INT     NOT NULL,   ADDRESS">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/115957-7e7068ef5a687b48.png?imageView2/2/w/1240/q/100">
+<meta property="og:updated_time" content="2017-10-12T05:55:13.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SQLite常用命令及Android数据库操作详解">
+<meta name="twitter:description" content="1.常用的sqlite语句创建数据库1sqlite3 DatabaseName.db 创建表1234567sqlite&amp;gt; CREATE TABLE COMPANY(   ID INT PRIMARY KEY   NOT NULL,   NAME           TEXT    NOT NULL,   AGE            INT     NOT NULL,   ADDRESS">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/115957-7e7068ef5a687b48.png?imageView2/2/w/1240/q/100">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://www.sanqis.com/blog/blog/f922435e/"/>
+
+
+
+
+
+  <title>SQLite常用命令及Android数据库操作详解 | 今夕何夕</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">今夕何夕</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">博客</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://www.sanqis.com/blog/blog/f922435e/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jadyli">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="今夕何夕">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SQLite常用命令及Android数据库操作详解</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-10T19:33:35+08:00">
+                2017-07-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-常用的sqlite语句"><a href="#1-常用的sqlite语句" class="headerlink" title="1.常用的sqlite语句"></a>1.常用的sqlite语句</h2><h3 id="创建数据库"><a href="#创建数据库" class="headerlink" title="创建数据库"></a>创建数据库</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sqlite3 DatabaseName.db</div></pre></td></tr></table></figure>
+<h3 id="创建表"><a href="#创建表" class="headerlink" title="创建表"></a>创建表</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">sqlite&gt; CREATE TABLE COMPANY(</div><div class="line">   ID INT PRIMARY KEY   NOT NULL,</div><div class="line">   NAME           TEXT    NOT NULL,</div><div class="line">   AGE            INT     NOT NULL,</div><div class="line">   ADDRESS        CHAR(50),</div><div class="line">   SALARY         REAL</div><div class="line">);</div></pre></td></tr></table></figure>
+<h3 id="删除表"><a href="#删除表" class="headerlink" title="删除表"></a>删除表</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">DROP</span> <span class="keyword">TABLE</span> database_name.table_name;</div></pre></td></tr></table></figure>
+<h3 id="修改表"><a href="#修改表" class="headerlink" title="修改表"></a>修改表</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> COMPANY <span class="keyword">RENAME</span> <span class="keyword">TO</span> OLD_COMPANY;</div><div class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> OLD_COMPANY <span class="keyword">ADD</span> <span class="keyword">COLUMN</span> SEX <span class="built_in">char</span>(<span class="number">1</span>);</div></pre></td></tr></table></figure>
+<h3 id="插入"><a href="#插入" class="headerlink" title="插入"></a>插入</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> COMPANY (<span class="keyword">ID</span>,<span class="keyword">NAME</span>,AGE,ADDRESS,SALARY)</div><div class="line"><span class="keyword">VALUES</span> (<span class="number">1</span>, <span class="string">'Paul'</span>, <span class="number">32</span>, <span class="string">'California'</span>, <span class="number">20000.00</span> );</div></pre></td></tr></table></figure>
+<h3 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">DELETE</span> <span class="keyword">FROM</span> COMPANY <span class="keyword">WHERE</span> <span class="keyword">ID</span> = <span class="number">7</span>;</div></pre></td></tr></table></figure>
+<h3 id="修改"><a href="#修改" class="headerlink" title="修改"></a>修改</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">UPDATE</span> COMPANY <span class="keyword">SET</span> ADDRESS = <span class="string">'Texas'</span> <span class="keyword">WHERE</span> <span class="keyword">ID</span> = <span class="number">6</span>;</div></pre></td></tr></table></figure>
+<p>不加WHERE表示所有数据。</p>
+<h3 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h3><p>一般使用唯一索引。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">CREATE</span> <span class="keyword">UNIQUE</span> <span class="keyword">INDEX</span> index_name</div><div class="line"><span class="keyword">on</span> table_name (column_name);</div></pre></td></tr></table></figure>
+<p>如果多个列在Where子句都使用频繁，则可以使用组合索引。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">CREATE</span> <span class="keyword">INDEX</span> index_name</div><div class="line"><span class="keyword">on</span> table_name (column1, column2);</div></pre></td></tr></table></figure>
+<p>删除索引</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">DROP</span> <span class="keyword">INDEX</span> index_name;</div></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> COMPANY INDEXED <span class="keyword">BY</span> salary_index <span class="keyword">WHERE</span> salary &gt; <span class="number">5000</span>;</div></pre></td></tr></table></figure>
+<h3 id="约束"><a href="#约束" class="headerlink" title="约束"></a>约束</h3><ul>
+<li>NOT NULL 约束：确保某列不能有 NULL 值。</li>
+<li>DEFAULT 约束：当某列没有指定值时，为该列提供默认值。</li>
+<li>UNIQUE 约束：确保某列中的所有值是不同的。</li>
+<li>PRIMARY Key 约束：唯一标识数据库表中的各行/记录。</li>
+<li>CHECK 约束：CHECK 约束确保某列中的所有值满足一定条件。</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> COMPANY3(</div><div class="line">   <span class="keyword">ID</span> <span class="built_in">INT</span> PRIMARY <span class="keyword">KEY</span>     <span class="keyword">NOT</span> <span class="literal">NULL</span>,</div><div class="line">   <span class="keyword">NAME</span>           <span class="built_in">TEXT</span>    <span class="keyword">NOT</span> <span class="literal">NULL</span>,</div><div class="line">   AGE            <span class="built_in">INT</span>     <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">UNIQUE</span>,</div><div class="line">   ADDRESS        <span class="built_in">CHAR</span>(<span class="number">50</span>),</div><div class="line">   SALARY         <span class="built_in">REAL</span>   <span class="keyword">DEFAULT</span> <span class="number">50000.00</span> <span class="keyword">CHECK</span>(SALARY &gt; <span class="number">0</span>)</div><div class="line">);</div></pre></td></tr></table></figure>
+<h3 id="查询"><a href="#查询" class="headerlink" title="查询"></a>查询</h3><h4 id="查询所有记录"><a href="#查询所有记录" class="headerlink" title="查询所有记录"></a>查询所有记录</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> COMPANY;</div></pre></td></tr></table></figure>
+<h4 id="WHERE-AND-OR"><a href="#WHERE-AND-OR" class="headerlink" title="WHERE AND OR"></a>WHERE AND OR</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> COMPANY <span class="keyword">WHERE</span> AGE &gt;= <span class="number">25</span> <span class="keyword">AND</span> SALARY &gt;= <span class="number">65000</span>;</div></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> COMPANY <span class="keyword">WHERE</span> AGE &gt;= <span class="number">25</span> <span class="keyword">OR</span> SALARY &gt;= <span class="number">65000</span>;</div></pre></td></tr></table></figure>
+<h4 id="比较运算符"><a href="#比较运算符" class="headerlink" title="比较运算符"></a>比较运算符</h4><p>假设变量 a=10，变量 b=20，则：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">运算符	            描述	                                 实例</div><div class="line"></div><div class="line">==	检查两个操作数的值是否相等，如果相等则条件为真。         (a == b) 不为真。</div><div class="line"></div><div class="line">=	检查两个操作数的值是否相等，如果相等则条件为真。          (a = b) 不为真。</div><div class="line"></div><div class="line">!=	检查两个操作数的值是否相等，如果不相等则条件为真。        (a != b) 为真。</div><div class="line"></div><div class="line">&lt;&gt;	检查两个操作数的值是否相等，如果不相等则条件为真。	     (a &lt;&gt; b) 为真。</div><div class="line"></div><div class="line">&gt;	检查左操作数的值是否大于右操作数的值，如果是则条件为真。	(a &gt; b) 不为真。</div><div class="line"></div><div class="line">&lt;	检查左操作数的值是否小于右操作数的值，如果是则条件为真。	(a &lt; b) 为真。</div><div class="line"></div><div class="line">&gt;=	检查左操作数的值是否大于等于右操作数的值，如果是则条件为真。	(a &gt;= b) 不为真。</div><div class="line"></div><div class="line">&lt;=	检查左操作数的值是否小于等于右操作数的值，如果是则条件为真。	(a &lt;= b) 为真。</div><div class="line"></div><div class="line">!&lt;	检查左操作数的值是否不小于右操作数的值，如果是则条件为真。	(a !&lt; b) 为假。</div><div class="line"></div><div class="line">!&gt;	检查左操作数的值是否不大于右操作数的值，如果是则条件为真。	(a !&gt; b) 为真。</div></pre></td></tr></table></figure>
+<h4 id="逻辑运算符"><a href="#逻辑运算符" class="headerlink" title="逻辑运算符"></a>逻辑运算符</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">运算符	                            描述</div><div class="line"></div><div class="line">AND	         AND 运算符允许在一个 SQL 语句的 WHERE 子句中的多个条件的存在。</div><div class="line"></div><div class="line">BETWEEN	     BETWEEN 运算符用于在给定最小值和最大值范围内的一系列值中搜索值。</div><div class="line"></div><div class="line">EXISTS	     EXISTS 运算符用于在满足一定条件的指定表中搜索行的存在。</div><div class="line"></div><div class="line">IN	         IN运算符用于把某个值与一系列指定列表的值进行比较。</div><div class="line"></div><div class="line">NOT IN	     IN 运算符的对立面，用于把某个值与不在一系列指定列表的值进行比较。</div><div class="line"></div><div class="line">LIKE	     LIKE 运算符用于把某个值与使用通配符运算符的相似值进行比较。</div><div class="line"></div><div class="line">GLOB	     GLOB 运算符用于把某个值与使用通配符运算符的相似值进行比较。GLOB 与 LIKE 不同之处在于，它是大小写敏感的。</div><div class="line"></div><div class="line">NOT	         NOT 运算符是所用的逻辑运算符的对立面。比如 NOT EXISTS、NOT BETWEEN、NOT IN，等等。它是否定运算符。</div><div class="line"></div><div class="line">OR	         OR 运算符用于结合一个 SQL 语句的 WHERE 子句中的多个条件。</div><div class="line"></div><div class="line">IS NULL	     NULL 运算符用于把某个值与 NULL 值进行比较。</div><div class="line"></div><div class="line">IS	         IS 运算符与 = 相似。</div><div class="line"></div><div class="line">IS NOT	     IS NOT 运算符与 != 相似。</div><div class="line"></div><div class="line">||	         连接两个不同的字符串，得到一个新的字符串。</div><div class="line"></div><div class="line">UNIQUE	     UNIQUE 运算符搜索指定表中的每一行，确保唯一性（无重复）。</div></pre></td></tr></table></figure>
+<h4 id="指定字段"><a href="#指定字段" class="headerlink" title="指定字段"></a>指定字段</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> <span class="keyword">ID</span>, <span class="keyword">NAME</span>, SALARY <span class="keyword">FROM</span> COMPANY;</div></pre></td></tr></table></figure>
+<h4 id="指定列宽"><a href="#指定列宽" class="headerlink" title="指定列宽"></a>指定列宽</h4><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sqlite&gt;.width 10, 20, 10</div><div class="line">sqlite&gt;SELECT * FROM COMPANY;</div></pre></td></tr></table></figure>
+<h4 id="Joins"><a href="#Joins" class="headerlink" title="Joins"></a>Joins</h4><p>现有两个表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">COMPANY表：</div><div class="line"></div><div class="line">ID          NAME        AGE         ADDRESS     SALARY</div><div class="line">----------  ----------  ----------  ----------  ----------</div><div class="line">1           Paul        32          California  20000.0</div><div class="line">2           Allen       25          Texas       15000.0</div><div class="line">3           Teddy       23          Norway      20000.0</div><div class="line">4           Mark        25          Rich-Mond   65000.0</div><div class="line">5           David       27          Texas       85000.0</div><div class="line">6           Kim         22          South-Hall  45000.0</div><div class="line">7           James       24          Houston     10000.0</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">DEPARTMENT表：</div><div class="line"></div><div class="line">ID          DEPT        EMP_ID</div><div class="line">----------  ----------  ----------</div><div class="line">1           IT Billing  1</div><div class="line">2           Engineerin  2</div><div class="line">3           Finance     7</div></pre></td></tr></table></figure>
+<p><strong>交叉连接 - CROSS JOIN</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> EMP_ID, <span class="keyword">NAME</span>, DEPT <span class="keyword">FROM</span> COMPANY <span class="keyword">CROSS</span> <span class="keyword">JOIN</span> DEPARTMENT;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">EMP_ID      NAME        DEPT</div><div class="line">----------  ----------  ----------</div><div class="line">1           Paul        IT Billing</div><div class="line">2           Paul        Engineerin</div><div class="line">7           Paul        Finance</div><div class="line">1           Allen       IT Billing</div><div class="line">2           Allen       Engineerin</div><div class="line">7           Allen       Finance</div><div class="line">1           Teddy       IT Billing</div><div class="line">2           Teddy       Engineerin</div><div class="line">7           Teddy       Finance</div><div class="line">1           Mark        IT Billing</div><div class="line">2           Mark        Engineerin</div><div class="line">7           Mark        Finance</div><div class="line">1           David       IT Billing</div><div class="line">2           David       Engineerin</div><div class="line">7           David       Finance</div><div class="line">1           Kim         IT Billing</div><div class="line">2           Kim         Engineerin</div><div class="line">7           Kim         Finance</div><div class="line">1           James       IT Billing</div><div class="line">2           James       Engineerin</div><div class="line">7           James       Finance</div></pre></td></tr></table></figure>
+<p><strong>内连接 - INNER JOIN</strong><br>内连接（INNER JOIN）根据连接谓词结合两个表（table1 和 table2）的列值来创建一个新的结果表。查询会把 table1 中的每一行与 table2 中的每一行进行比较，找到所有满足连接谓词的行的匹配对。当满足连接谓词时，A 和 B 行的每个匹配对的列值会合并成一个结果行。<br>内连接（INNER JOIN）是最常见的连接类型，是默认的连接类型。INNER 关键字是可选的，可以不输。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> EMP_ID, <span class="keyword">NAME</span>, DEPT <span class="keyword">FROM</span> COMPANY <span class="keyword">INNER</span> <span class="keyword">JOIN</span> DEPARTMENT</div><div class="line">        <span class="keyword">ON</span> COMPANY.ID = DEPARTMENT.EMP_ID;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">EMP_ID      NAME        DEPT</div><div class="line">----------  ----------  ----------</div><div class="line">1           Paul        IT Billing</div><div class="line">2           Allen       Engineerin</div><div class="line">7           James       Finance</div></pre></td></tr></table></figure>
+<p><strong>外连接 - OUTER JOIN</strong><br>一旦主连接计算完成，外连接（OUTER JOIN）将从一个或两个表中任何未连接的行合并进来，外连接的列使用 NULL 值，将它们附加到结果表中。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> EMP_ID, <span class="keyword">NAME</span>, DEPT <span class="keyword">FROM</span> COMPANY <span class="keyword">LEFT</span> <span class="keyword">OUTER</span> <span class="keyword">JOIN</span> DEPARTMENT</div><div class="line">        <span class="keyword">ON</span> COMPANY.ID = DEPARTMENT.EMP_ID;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">EMP_ID      NAME        DEPT</div><div class="line">----------  ----------  ----------</div><div class="line">1           Paul        IT Billing</div><div class="line">2           Allen       Engineerin</div><div class="line">            Teddy</div><div class="line">            Mark</div><div class="line">            David</div><div class="line">            Kim</div><div class="line">7           James       Finance</div></pre></td></tr></table></figure>
+<h4 id="Like-子句"><a href="#Like-子句" class="headerlink" title="Like 子句"></a>Like 子句</h4><ul>
+<li>百分号（%）： 零个、一个或多个数字或字符</li>
+<li>下划线（_）：一个单一的数字或字符</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> <span class="keyword">FROM</span> table_name</div><div class="line"><span class="keyword">WHERE</span> <span class="keyword">column</span> <span class="keyword">LIKE</span> <span class="string">'%XXXX%'</span></div></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> <span class="keyword">FROM</span> table_name</div><div class="line"><span class="keyword">WHERE</span> <span class="keyword">column</span> <span class="keyword">LIKE</span> <span class="string">'_XXXX_'</span></div></pre></td></tr></table></figure>
+<h4 id="GLOB子句"><a href="#GLOB子句" class="headerlink" title="GLOB子句"></a>GLOB子句</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">语句                          描述</div><div class="line"></div><div class="line">WHERE SALARY GLOB &apos;200*&apos;    查找以 200 开头的任意值</div><div class="line">WHERE SALARY GLOB &apos;*200*&apos;   查找任意位置包含 200 的任意值</div><div class="line">WHERE SALARY GLOB &apos;?00*&apos;    查找第二位和第三位为 00 的任意值</div><div class="line">WHERE SALARY GLOB &apos;2??&apos;     查找以 2 开头，且长度至少为 3 个字符的任意值</div><div class="line">WHERE SALARY GLOB &apos;*2&apos;      查找以 2 结尾的任意值</div><div class="line">WHERE SALARY GLOB &apos;?2*3&apos;    查找第二位为 2，且以 3 结尾的任意值</div><div class="line">WHERE SALARY GLOB &apos;2???3&apos;   查找长度为 5 位数，且以 2 开头以 3 结尾的任意值</div></pre></td></tr></table></figure>
+<h4 id="Limit-子句"><a href="#Limit-子句" class="headerlink" title="Limit 子句"></a>Limit 子句</h4><p>限制提取行数</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> COMPANY <span class="keyword">LIMIT</span> <span class="number">6</span>;</div></pre></td></tr></table></figure>
+<p>从第三位开始提取 3 个记录</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> COMPANY <span class="keyword">LIMIT</span> <span class="number">3</span> <span class="keyword">OFFSET</span> <span class="number">2</span>;</div></pre></td></tr></table></figure>
+<h4 id="Order-By"><a href="#Order-By" class="headerlink" title="Order By"></a>Order By</h4><ul>
+<li>ASC   升序</li>
+<li>DESC  降序</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> COMPANY <span class="keyword">ORDER</span> <span class="keyword">BY</span> SALARY <span class="keyword">ASC</span>;</div></pre></td></tr></table></figure>
+<h4 id="Group-By"><a href="#Group-By" class="headerlink" title="Group By"></a>Group By</h4><p>对相同的数据进行分组</p>
+<p>GROUP BY 子句放在 WHERE 子句之后，放在 ORDER BY 子句之前。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> <span class="keyword">column</span>-<span class="keyword">list</span></div><div class="line"><span class="keyword">FROM</span> table_name</div><div class="line"><span class="keyword">WHERE</span> [ conditions ]</div><div class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> column1, column2....columnN</div><div class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> column1, column2....columnN</div></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> <span class="keyword">NAME</span>, <span class="keyword">SUM</span>(SALARY) <span class="keyword">FROM</span> COMPANY <span class="keyword">GROUP</span> <span class="keyword">BY</span> <span class="keyword">NAME</span>;</div></pre></td></tr></table></figure>
+<h4 id="Having-子句"><a href="#Having-子句" class="headerlink" title="Having 子句"></a>Having 子句</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> column1, column2</div><div class="line"><span class="keyword">FROM</span> table1, table2</div><div class="line"><span class="keyword">WHERE</span> [ conditions ]</div><div class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> column1, column2</div><div class="line"><span class="keyword">HAVING</span> [ conditions ]</div><div class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> column1, column2</div></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> COMPANY <span class="keyword">GROUP</span> <span class="keyword">BY</span> <span class="keyword">name</span> <span class="keyword">HAVING</span> <span class="keyword">count</span>(<span class="keyword">name</span>) &lt; <span class="number">2</span>;</div></pre></td></tr></table></figure>
+<h2 id="2-新建数据库以及更新"><a href="#2-新建数据库以及更新" class="headerlink" title="2.新建数据库以及更新"></a>2.新建数据库以及更新</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DatabaseHelper</span> <span class="keyword">extends</span> <span class="title">SQLiteOpenHelper</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String DATABASE_NAME=<span class="string">"test.db"</span>;<span class="comment">//数据库名称</span></div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> SCHEMA_VERSION=<span class="number">2</span>;<span class="comment">//版本号,则是升级之后的,升级方法请看onUpgrade方法里面的判断</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DatabaseHelper</span><span class="params">(Context context)</span> </span>&#123;<span class="comment">//构造函数,接收上下文作为参数,直接调用的父类的构造函数</span></div><div class="line">        <span class="keyword">super</span>(context, DATABASE_NAME, <span class="keyword">null</span>, SCHEMA_VERSION);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(SQLiteDatabase db)</span> </span>&#123;<span class="comment">//创建的是一个午餐订餐的列表,id,菜名,地址等等</span></div><div class="line">        db.execSQL(<span class="string">"CREATE TABLE restaurants (_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, address TEXT, type TEXT, notes TEXT, phone TEXT);"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onUpgrade</span><span class="params">(SQLiteDatabase db, <span class="keyword">int</span> oldVersion, <span class="keyword">int</span> newVersion)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (oldVersion==<span class="number">1</span> &amp;&amp; newVersion==<span class="number">2</span>) &#123;<span class="comment">//升级判断,如果再升级就要再加两个判断,从1到3,从2到3</span></div><div class="line">            db.execSQL(<span class="string">"ALTER TABLE restaurants ADD phone TEXT;"</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="3-增删改查"><a href="#3-增删改查" class="headerlink" title="3.增删改查"></a>3.增删改查</h2><h3 id="查"><a href="#查" class="headerlink" title="查"></a>查</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> Cursor <span class="title">query</span><span class="params">(String table, String[] columns, String selection,</span></span></div><div class="line"><span class="function"><span class="params">            String[] selectionArgs, String groupBy, String having,</span></span></div><div class="line"><span class="function"><span class="params">            String orderBy, String limit)</span></span></div></pre></td></tr></table></figure>
+<p>这些参数的含义在上面的sqlite语法中基本都讲过了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">public Cursor rawQuery(String sql, String[] selectionArgs)</div></pre></td></tr></table></figure>
+<p>操作Cursor(图片来自<a href="http://www.jianshu.com/p/5c33be6ce89d" target="_blank" rel="external">这里</a>)<br><img src="http://upload-images.jianshu.io/upload_images/115957-7e7068ef5a687b48.png?imageView2/2/w/1240/q/100" alt=""></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">public List&lt;PointBean&gt; getAllPoints() &#123;  </div><div class="line">        String sql = &quot;select * from points&quot;;  </div><div class="line">        SQLiteDatabase db = helper.getWritableDatabase();  </div><div class="line">        List&lt;PointBean&gt; pointList = new ArrayList&lt;PointBean&gt;();  </div><div class="line">        PointBean point = null;  </div><div class="line">        Cursor cursor = db.rawQuery(sql, null);  </div><div class="line">        while (cursor.moveToNext()) &#123;  </div><div class="line">            point = new PointBean();  </div><div class="line">            point.setPointName(cursor.getString(cursor  </div><div class="line">                    .getColumnIndex(&quot;point_name&quot;)));  </div><div class="line">            point.setLongitude(cursor.getDouble(cursor  </div><div class="line">                    .getColumnIndex(&quot;longitude&quot;)));  </div><div class="line">            point.setLatitude(cursor.getDouble(cursor  </div><div class="line">                    .getColumnIndex(&quot;latitude&quot;)));  </div><div class="line">            pointList.add(point);  </div><div class="line">        &#125;  </div><div class="line">        return pointList;  </div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<h2 id="4-数据库导入"><a href="#4-数据库导入" class="headerlink" title="4.数据库导入"></a>4.数据库导入</h2><h2 id="5-常用框架"><a href="#5-常用框架" class="headerlink" title="5.常用框架"></a>5.常用框架</h2>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>如果您觉得这篇文章不错，可以打赏支持下哦，谢谢</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="Jadyli 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Jadyli 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/eff6ff4b/" rel="next" title="Glide最新版V4使用指南">
+                <i class="fa fa-chevron-left"></i> Glide最新版V4使用指南
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/bbef91e2/" rel="prev" title="React开发笔记(一) 环境搭建和Hello World">
+                React开发笔记(一) 环境搭建和Hello World <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Jadyli</p>
+              <p class="site-description motion-element" itemprop="description">三七的博客</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">50</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/Jadyli" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-常用的sqlite语句"><span class="nav-number">1.</span> <span class="nav-text">1.常用的sqlite语句</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建数据库"><span class="nav-number">1.1.</span> <span class="nav-text">创建数据库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建表"><span class="nav-number">1.2.</span> <span class="nav-text">创建表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除表"><span class="nav-number">1.3.</span> <span class="nav-text">删除表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#修改表"><span class="nav-number">1.4.</span> <span class="nav-text">修改表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#插入"><span class="nav-number">1.5.</span> <span class="nav-text">插入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除"><span class="nav-number">1.6.</span> <span class="nav-text">删除</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#修改"><span class="nav-number">1.7.</span> <span class="nav-text">修改</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#索引"><span class="nav-number">1.8.</span> <span class="nav-text">索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#约束"><span class="nav-number">1.9.</span> <span class="nav-text">约束</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询"><span class="nav-number">1.10.</span> <span class="nav-text">查询</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#查询所有记录"><span class="nav-number">1.10.1.</span> <span class="nav-text">查询所有记录</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#WHERE-AND-OR"><span class="nav-number">1.10.2.</span> <span class="nav-text">WHERE AND OR</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#比较运算符"><span class="nav-number">1.10.3.</span> <span class="nav-text">比较运算符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#逻辑运算符"><span class="nav-number">1.10.4.</span> <span class="nav-text">逻辑运算符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#指定字段"><span class="nav-number">1.10.5.</span> <span class="nav-text">指定字段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#指定列宽"><span class="nav-number">1.10.6.</span> <span class="nav-text">指定列宽</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Joins"><span class="nav-number">1.10.7.</span> <span class="nav-text">Joins</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Like-子句"><span class="nav-number">1.10.8.</span> <span class="nav-text">Like 子句</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#GLOB子句"><span class="nav-number">1.10.9.</span> <span class="nav-text">GLOB子句</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Limit-子句"><span class="nav-number">1.10.10.</span> <span class="nav-text">Limit 子句</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Order-By"><span class="nav-number">1.10.11.</span> <span class="nav-text">Order By</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Group-By"><span class="nav-number">1.10.12.</span> <span class="nav-text">Group By</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Having-子句"><span class="nav-number">1.10.13.</span> <span class="nav-text">Having 子句</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-新建数据库以及更新"><span class="nav-number">2.</span> <span class="nav-text">2.新建数据库以及更新</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-增删改查"><span class="nav-number">3.</span> <span class="nav-text">3.增删改查</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查"><span class="nav-number">3.1.</span> <span class="nav-text">查</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-数据库导入"><span class="nav-number">4.</span> <span class="nav-text">4.数据库导入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-常用框架"><span class="nav-number">5.</span> <span class="nav-text">5.常用框架</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1264747959'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s19.cnzz.com/z_stat.php%3Fid%3D1264747959%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jadyli</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
